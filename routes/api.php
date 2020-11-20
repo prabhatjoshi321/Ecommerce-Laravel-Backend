@@ -32,5 +32,5 @@ Route::group([
         Route::get('/logout', 'App\Http\Controllers\Api\AuthController@logout');
         Route::get('/user', 'App\Http\Controllers\Api\AuthController@user');
     });
-    Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
+   // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
 });

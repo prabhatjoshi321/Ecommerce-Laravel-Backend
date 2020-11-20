@@ -6,6 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 use Auth;
 
 class AuthController extends Controller
@@ -14,12 +15,14 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
+            'usertype' => 'required|integer|between:1,10',
             'password' => 'required|string|confirmed'
         ]);
 
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
+            'usertype' => $request->usertype,
             'password' => bcrypt($request->password)
         ]);
 
@@ -46,9 +49,11 @@ class AuthController extends Controller
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me)
-            $token->expires_at = Carbon::now()->addWeeks(1);
+            $token->expires_at = Carbon::now()->addWeeks(20);
         $token->save();
         return response()->json([
+            'username' => $user->name,
+            'usertype' => $user->usertype,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse(
