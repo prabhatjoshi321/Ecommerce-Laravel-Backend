@@ -10,6 +10,7 @@ class product extends Model
     use HasFactory;
     protected $fillable = [
         'username',
+        'email',
         'address',
         'city',
         'rent_cond',
