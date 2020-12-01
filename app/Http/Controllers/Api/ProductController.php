@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use Image;
 class ProductController extends Controller
 {
@@ -16,10 +16,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = Products::latest()->paginate(5);
-        return view('store_image', compact('data'))
-        ->with('i', (request()->input('page', 1) - 1)
-        * 5);
+        $data = product::latest()->paginate(5);
+        return response()->json([
+            'data' => $data,
+        ], 201);
     }
 
     /**
@@ -62,15 +62,40 @@ class ProductController extends Controller
             'registration_status' => 'required',
         ]);
 
-            $image_file = $request->product_image;
-            $image = Image::make($image_file);
 
-            Response::make($image->encode('jpeg'));
+
+
+
+        if ($request->hasFile('product_image')) {
+            // Get filename with the extension
+            $filenameWithExt = $request->file('product_image')->getClientOriginalName();
+            // Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $request->file('product_image')->getClientOriginalExtension();
+            // Filename to store
+            $image_file= $filename.'_'.time().'.'.$extension;
+
+            //Reduce the size of the image and upload image
+            $path = Storage::disk('public')->putFile('product_image_file', $request->file('product_image'));
+            //$path = $request->file('product_image')->store('product_image');
+            Image::make($request->file('product_image'));
+        }
+
+
+
+
+
+
+
+            //$image = Image::make($image_file);
+
+           // Response::make($image->encode('jpeg'));
 
             $product_data = new Product([
                 'username' => $request->username,
                 'email' => $request->email,
-                'product_image' => $image,
+                'product_image' => $path,
                 'address' => $request->address,
                 'city' => $request->city,
                 'rent_cond' => $request->rent_cond,
@@ -105,7 +130,8 @@ class ProductController extends Controller
             $product_data->save();
 
             return response()->json([
-                'message' => 'Successfully inserted product'
+                'message' => 'Successfully inserted product',
+                'path$' => $path,
             ], 201);
 
     }
