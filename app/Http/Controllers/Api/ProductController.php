@@ -66,21 +66,11 @@ class ProductController extends Controller
 
 
 
-        if ($request->hasFile('product_image')) {
-            // Get filename with the extension
-            $filenameWithExt = $request->file('product_image')->getClientOriginalName();
-            // Get just filename
-            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
-            // Get just ext
-            $extension = $request->file('product_image')->getClientOriginalExtension();
-            // Filename to store
-            $image_file= $filename.'_'.time().'.'.$extension;
 
-            //Reduce the size of the image and upload image
+
             $path = Storage::disk('public')->putFile('product_image_file', $request->file('product_image'));
-            //$path = $request->file('product_image')->store('product_image');
             Image::make($request->file('product_image'));
-        }
+
 
 
 
@@ -131,7 +121,7 @@ class ProductController extends Controller
 
             return response()->json([
                 'message' => 'Successfully inserted product',
-                'path$' => $path,
+                'path' => $path,
             ], 201);
 
     }
