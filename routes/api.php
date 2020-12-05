@@ -38,14 +38,15 @@ Route::group([
 Route::group([
     'prefix' => 'product'
 ], function () {
-    Route::post('/insert_product', 'App\Http\Controllers\Api\ProductController@create');
     Route::get('/get_product', 'App\Http\Controllers\Api\ProductController@index');
+    Route::get('/see', 'App\Http\Controllers\Api\ProductController@store');
 
-    // Route::group([
-    //   'middleware' => 'auth:api'
-    // ], function() {
-    //     Route::get('/logout', 'App\Http\Controllers\Api\AuthController@logout');
-    //     Route::get('/user', 'App\Http\Controllers\Api\AuthController@user');
-    // });
+
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::post('/insert_product', 'App\Http\Controllers\Api\ProductController@create');
+
+    });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
 });

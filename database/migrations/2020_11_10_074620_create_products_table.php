@@ -43,8 +43,9 @@ class CreateProductsTable extends Migration
             $table->string('features');
             $table->string('nearby_places');
             $table->string('area');
-            $table->string('description');
+            $table->longText('description');
             $table->string('registration_status');
+            $table->string('build_name');
             $table->timestamps();
         });
     }

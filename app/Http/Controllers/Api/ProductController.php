@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\product;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = product::latest()->paginate(5);
+        $data = product::latest()->paginate(10);
         return response()->json([
             'data' => $data,
         ], 201);
@@ -68,7 +69,7 @@ class ProductController extends Controller
 
 
 
-            $path = Storage::disk('public')->putFile('product_image_file', $request->file('product_image'));
+            $path = Storage::disk('public')->putFile('/product_image_file', $request->file('product_image'));
             Image::make($request->file('product_image'));
 
 
@@ -85,7 +86,7 @@ class ProductController extends Controller
             $product_data = new Product([
                 'username' => $request->username,
                 'email' => $request->email,
-                'product_image' => $path,
+                'product_image' => public_path().'/storage/'.$path,
                 'address' => $request->address,
                 'city' => $request->city,
                 'rent_cond' => $request->rent_cond,
@@ -113,6 +114,7 @@ class ProductController extends Controller
                 'area' => $request->area,
                 'description' => $request->description,
                 'registration_status' => $request->registration_status,
+                'build_name' => $request->build_name,
             ]);
 
             //product::create($product_data);
@@ -121,7 +123,7 @@ class ProductController extends Controller
 
             return response()->json([
                 'message' => 'Successfully inserted product',
-                'path' => $path,
+                'path' => $product_data,
             ], 201);
 
     }
@@ -132,9 +134,12 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+
+
     public function store(Request $request)
     {
-        //
+
     }
 
     /**

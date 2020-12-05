@@ -38,6 +38,8 @@ class product extends Model
         'nearby_places',
         'area',
         'description',
-        'registration_status'
+        'registration_status',
+        'build_name',
     ];
+
 }
