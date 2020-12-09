@@ -65,6 +65,19 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => 'ftp.housing-street.ecommercepro.tech',
+            'username' => 'u359275742.prabhat',
+            'password' => 'Brand@123',
+            // Optional FTP Settings...
+            'port'     => 21,
+            //'root' => 'public_html',
+            // 'passive'  => true,
+            // 'ssl'      => true,
+            // 'timeout'  => 30,
+        ],
+
     ],
 
     /*

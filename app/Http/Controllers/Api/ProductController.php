@@ -17,7 +17,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $data = product::latest()->paginate(10);
+        $data = product::latest()->paginate(100);
         return response()->json([
             'data' => $data,
         ], 201);
@@ -69,7 +69,7 @@ class ProductController extends Controller
 
 
 
-            $path = Storage::disk('public')->putFile('/product_image_file', $request->file('product_image'));
+            $path = Storage::disk('ftp')->putFile('/product_image_file', $request->file('product_image'));
             Image::make($request->file('product_image'));
 
 
@@ -86,7 +86,7 @@ class ProductController extends Controller
             $product_data = new Product([
                 'username' => $request->username,
                 'email' => $request->email,
-                'product_image' => public_path().'/storage/'.$path,
+                'product_image' => $path,
                 'address' => $request->address,
                 'city' => $request->city,
                 'rent_cond' => $request->rent_cond,
