@@ -39,8 +39,8 @@ Route::group([
     'prefix' => 'product'
 ], function () {
     Route::get('/get_product', 'App\Http\Controllers\Api\ProductController@index');
-    Route::get('/see', 'App\Http\Controllers\Api\ProductController@store');
-
+    Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
+    Route::get('/seeto', 'App\Http\Controllers\Api\ProductController@product_index');
 
     Route::group([
       'middleware' => 'auth:api'

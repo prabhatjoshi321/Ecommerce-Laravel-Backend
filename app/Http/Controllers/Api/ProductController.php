@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\product;
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Image;
+use App\Models\User;
 class ProductController extends Controller
 {
     /**
@@ -18,10 +20,44 @@ class ProductController extends Controller
     public function index()
     {
         $data = product::latest()->paginate(100);
+        //$tableq = DB::table('users')->select('id','name','email','profile_pic')->get();
         return response()->json([
-            'data' => $data,
+            //'users'=> $tableq,
+            'data' =>$data,
         ], 201);
+//         $mer=[];
+
+//         //$tableqt = DB::table('users')->select('*')->get();
+//         $max_id = DB::table('products')->where('id', DB::raw("(select max(`id`) from products)"))->value("id");
+
+//         for ($id_var = 0; $id_var<=$max_id; $id_var++){
+
+//         for ($variable = $id_var; $variable == $id_var; $variable++)
+//         {
+//             $product_id_func = product::where('id','=', $variable)->get()->toArray();
+//             $userid = DB::table('products')->select('user_id')->where("id", $variable)->value("value");
+//             $tableq = DB::table('users')->select('name','email','profile_pic')->where('id', $userid)->get()->toArray();
+
+//             $merged1 = array_merge($product_id_func, $tableq);
+
+//         }
+//         //$object = json_decode(json_encode($merged1), FALSE);
+
+//         //$mer = array_merge($mer, $merged1);
+
+// $mer = array_merge($mer, $merged1);
+//         //$mer = $merged2->merge($object);
+
+//         }
+//         return response()-> json([
+//             //'user_data' => $tableq,
+//             'data' => $mer,
+//             //'product' => $product_id_func,
+//         ]);
+
+
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -31,8 +67,7 @@ class ProductController extends Controller
     public function create(Request $request)
     {
         $request -> validate([
-            'username' => 'required',
-            'email' => 'required|string|unique:users',
+            'user_id' => 'required',
             'product_image' => 'required|image|max:2048',
             'address' => 'required',
             'city' => 'required',
@@ -84,8 +119,7 @@ class ProductController extends Controller
            // Response::make($image->encode('jpeg'));
 
             $product_data = new Product([
-                'username' => $request->username,
-                'email' => $request->email,
+                'user_id' => $request->user_id,
                 'product_image' => $path,
                 'address' => $request->address,
                 'city' => $request->city,
@@ -119,7 +153,6 @@ class ProductController extends Controller
 
             //product::create($product_data);
 
-            $product_data->save();
 
             return response()->json([
                 'message' => 'Successfully inserted product',
@@ -134,6 +167,74 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     public function search_prod_by_id(Request $request){
+
+
+        $request->validate([
+            'prod_id' => 'required',
+        ]);
+            $prod_id = $request->prod_id;
+
+        $product_id_func = product::find($prod_id)->productid;
+        $userid = DB::table('products')->select('user_id')->where("id", $prod_id)->value("value");
+        $tableq = DB::table('users')->select('id','name','email','profile_pic')->where('id', $userid)->get();
+
+            return response()-> json([
+                'user_data' => $tableq,
+                //'user_id' => $userid,
+                'product' => $product_id_func,
+            ]);
+
+        // return response()-> json([
+        //     'result' => $var3,
+        // ]);
+     }
+
+
+      public function product_index(){
+
+        // $merged2 =  DB::table('users')->select()->where('id');
+        // $merged1 = [];
+        $mer=[];
+
+        //$tableqt = DB::table('users')->select('*')->get();
+        $max_id = DB::table('products')->where('id', DB::raw("(select max(`id`) from products)"))->value("id");
+
+        for ($id_var = 0; $id_var<=$max_id; $id_var++){
+
+        for ($variable = $id_var; $variable == $id_var; $variable++)
+        {
+            $product_id_func = product::where('id','=', $variable)->get()->toArray();
+            $userid = DB::table('products')->select('user_id')->where("id", $variable)->value("value");
+            $tableq = DB::table('users')->select('name','email','profile_pic')->where('id', $userid)->get()->toArray();
+
+            $merged1 = array_merge($product_id_func, $tableq);
+
+        }
+        //$object = json_decode(json_encode($merged1), FALSE);
+
+        //$mer = array_merge($mer, $merged1);
+
+$mer = array_merge($mer, $merged1);
+        //$mer = $merged2->merge($object);
+
+        }
+        return response()-> json([
+            //'user_data' => $tableq,
+            'data' => $mer,
+            //'product' => $product_id_func,
+        ]);
+        // return response()->json([
+        //     'data' => $max_id,
+        // ], 201);
+
+
+        // return response()-> json([
+        //     'result' => $prod_index,
+        // ]);
+    }
+
 
 
 

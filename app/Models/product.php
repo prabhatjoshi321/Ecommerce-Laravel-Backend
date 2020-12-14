@@ -9,8 +9,7 @@ class product extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'username',
-        'email',
+        'user_id',
         'address',
         'city',
         'rent_cond',
@@ -41,5 +40,16 @@ class product extends Model
         'registration_status',
         'build_name',
     ];
+
+    public function productid()
+    {
+
+        return $this->hasMany('App\Models\product', 'id');
+    }
+
+    public function roles()
+    {
+
+    }
 
 }
