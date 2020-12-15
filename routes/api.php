@@ -41,6 +41,9 @@ Route::group([
     Route::get('/get_product', 'App\Http\Controllers\Api\ProductController@index');
     Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
     Route::get('/seeto', 'App\Http\Controllers\Api\ProductController@product_index');
+    Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
+    Route::post('/requirement', 'App\Http\Controllers\Api\RequirementController@create');
+    Route::get('/get_requ', 'App\Http\Controllers\Api\RequirementController@index');
 
     Route::group([
       'middleware' => 'auth:api'
