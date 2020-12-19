@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Image;
 use App\Models\User;
+use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     /**
@@ -68,7 +69,7 @@ class ProductController extends Controller
     {
         $request -> validate([
             'user_id' => 'required',
-            'product_image' => 'required|image|max:2048',
+            'product_image' => 'required',
             'address' => 'required',
             'city' => 'required',
             'rent_cond' => 'required',
@@ -102,13 +103,22 @@ class ProductController extends Controller
 
 
 
+        // $file_data = $request->input('product_image');
+        // $file_name = 'image_' . time() . '.jpeg'; //generating unique file name;
+
+        // // // storing image in storage/app/public Folder
+        // //     $path = Storage::disk('ftp')->put('/product_image_file'.$file_name, base64_decode($file_data));
 
 
-            $path = Storage::disk('ftp')->putFile('/product_image_file', $request->file('product_image'));
-            Image::make($request->file('product_image'));
+        //     $path = Storage::disk('ftp')->put('product_image_file/'.$file_name, base64_decode($file_data));
+        //     //Image::make($request->file('product_image'));
 
 
-
+        $base64_image = $request->input('product_image'); // your base64 encoded
+        @list($type, $file_data) = explode(';', $base64_image);
+        @list(, $file_data) = explode(',', $file_data);
+        $imageName = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('ftp')->put('product_image_file/'.$imageName, base64_decode($file_data));
 
 
 
@@ -120,7 +130,7 @@ class ProductController extends Controller
 
             $product_data = new Product([
                 'user_id' => $request->user_id,
-                'product_image' => $path,
+                'product_image' => 'product_image_file/'.$imageName,
                 'address' => $request->address,
                 'city' => $request->city,
                 'rent_cond' => $request->rent_cond,

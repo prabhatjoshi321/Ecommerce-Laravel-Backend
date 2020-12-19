@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Auth;
 use Image;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -17,17 +18,20 @@ class AuthController extends Controller
             'name' => 'required',
             'email' => 'required|string|unique:users',
             'usertype' => 'required|integer|between:1,10',
-            'profile_pic' => 'required|image|max:2048',
+            'profile_pic' => 'required',
             'password' => 'required|string|confirmed'
         ]);
 
-        $path = Storage::disk('ftp')->putFile('/profile_pic', $request->file('profile_pic'));
-        Image::make($request->file('profile_pic'));
+        $base64_image = $request->input('profile_pic'); // your base64 encoded
+        @list($type, $file_data) = explode(';', $base64_image);
+        @list(, $file_data) = explode(',', $file_data);
+        $imageName = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('ftp')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
         $user = new User([
             'name' => $request->name,
             'email' => $request->email,
-            'profile_pic' => $path,
+            'profile_pic' => 'profile_image_file/'.$imageName,
             'usertype' => $request->usertype,
             'password' => bcrypt($request->password)
         ]);
