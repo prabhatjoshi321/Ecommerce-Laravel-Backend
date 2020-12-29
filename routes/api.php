@@ -52,7 +52,8 @@ Route::group([
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::post('/insert_product', 'App\Http\Controllers\Api\ProductController@create');
+        Route::post('/insert_product_sale', 'App\Http\Controllers\Api\ProductController@create_sale');
+        Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@create_rent');
 
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
