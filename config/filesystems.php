@@ -78,6 +78,19 @@ return [
             // 'timeout'  => 30,
         ],
 
+        // 'ftp' => [
+        //     'driver' => 'ftp',
+        //     'host' => '127.0.0.1',
+        //     'username' => 'local',
+        //     'password' => '123456',
+        //     // Optional FTP Settings...
+        //     'port'     => 14147,
+        //     //'root' => 'public_html',
+        //     // 'passive'  => true,
+        //     // 'ssl'      => true,
+        //     // 'timeout'  => 30,
+        // ],
+
     ],
 
     /*

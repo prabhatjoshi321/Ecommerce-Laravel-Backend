@@ -21,13 +21,12 @@ class CreateProductsTable extends Migration
             $table->string('rent_cond');
             $table->string('rent_availability');
             $table->string('sale_availability');
-            $table->string('maintenance_charge');
             $table->string('possession_by');
             $table->string('locality');
             $table->boolean('display_address');
             $table->string('ownership');
             $table->string('expected_pricing');
-            $table->json('inclusive_pricing_details');
+            $table->longText('inclusive_pricing_details');
             $table->boolean('tax_govt_charge');
             $table->boolean('price_negotiable');
             $table->boolean('maintenance_charge_status');
@@ -48,8 +47,8 @@ class CreateProductsTable extends Migration
             $table->json('additional_rooms');
             $table->string('furnishing_status');
             $table->json('furnishings');
-            $table->integer('total_floors');
-            $table->integer('property_on_floor');
+            $table->string('total_floors');
+            $table->string('property_on_floor');
             $table->string('rera_registration_status');
             $table->json('amenities');
             $table->string('facing_towards');
@@ -58,7 +57,6 @@ class CreateProductsTable extends Migration
             $table->integer('parking_covered_count');
             $table->integer('parking_open_count');
             $table->string('availability_condition');
-            $table->string('possession_by');
             $table->string('buildyear');
             $table->string('age_of_property');
             $table->string('expected_rent');
@@ -74,7 +72,7 @@ class CreateProductsTable extends Migration
             $table->string('carpet_area');
             $table->longText('property_detail');
             $table->string('build_name');
-            $table->string('willing_to rent_out_to');
+            $table->string('willing_to_rent_out_to');
             $table->string('agreement_type');
             $table->string('nearest_landmark');
             $table->string('map_latitude');

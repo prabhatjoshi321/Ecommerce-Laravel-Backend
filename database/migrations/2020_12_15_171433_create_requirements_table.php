@@ -20,7 +20,7 @@ class CreateRequirementsTable extends Migration
             $table->string('purchase_mode');
             $table->string('cash_amount');
             $table->string('loan_amount');
-            $table->tring('property_type');
+            $table->string('property_type');
             $table->mediumText('requirement');
             $table->timestamps();
         });
