@@ -65,31 +65,31 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
-        'ftp' => [
-            'driver' => 'ftp',
-            'host' => 'ftp.housing-street.ecommercepro.tech',
-            'username' => 'u359275742.prabhat',
-            'password' => 'Brand@123',
-            // Optional FTP Settings...
-            'port'     => 21,
-            //'root' => 'public_html',
-            // 'passive'  => true,
-            // 'ssl'      => true,
-            // 'timeout'  => 30,
-        ],
-
         // 'ftp' => [
         //     'driver' => 'ftp',
-        //     'host' => '127.0.0.1',
-        //     'username' => 'local',
-        //     'password' => '123456',
+        //     'host' => 'ftp.housing-street.ecommercepro.tech',
+        //     'username' => 'u359275742.prabhat',
+        //     'password' => 'Brand@123',
         //     // Optional FTP Settings...
-        //     'port'     => 14147,
+        //     'port'     => 21,
         //     //'root' => 'public_html',
         //     // 'passive'  => true,
         //     // 'ssl'      => true,
         //     // 'timeout'  => 30,
         // ],
+
+        'ftp' => [
+            'driver' => 'ftp',
+            'host' => 'ftp://31.170.166.131',
+            'username' => 'u685640555',
+            'password' => 'Brand@123',
+            // Optional FTP Settings...
+            // 'port'     => 14147,
+            // 'root' => '/hoolikey',
+            // 'passive'  => true,
+            'ssl'      => true,
+            // 'timeout'  => 30,
+        ],
 
     ],
 

@@ -26,7 +26,7 @@ class AuthController extends Controller
         @list($type, $file_data) = explode(';', $base64_image);
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+        Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
         $user = new User([
             'name' => $request->name,
@@ -62,7 +62,7 @@ class AuthController extends Controller
         @list($type, $file_data) = explode(';', $base64_image);
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+        Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
         $user = new User([
             'name' => $request->name,
@@ -106,7 +106,7 @@ class AuthController extends Controller
         @list($type, $file_data) = explode(';', $base64_image);
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+        Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
         $user = new User([
             'name' => $request->name,
@@ -158,7 +158,7 @@ class AuthController extends Controller
         @list($type, $file_data) = explode(';', $base64_image);
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+        Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
         $user = new User([
             'name' => $request->name,
@@ -207,6 +207,7 @@ class AuthController extends Controller
         $token->save();
         return response()->json([
             'username' => $user->name,
+            'id' => $user,
             'usertype' => $user->usertype,
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',

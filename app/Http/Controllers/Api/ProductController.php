@@ -68,58 +68,58 @@ class ProductController extends Controller
     public function create_sale(Request $request)
     {
         $request -> validate([
-            'user_id' => 'required' ,
-            'build_name' => 'required' ,
-            'type' => 'required' ,
-            'address' => 'required' ,
-            'city' => 'required' ,
-            'locality' => 'required' ,
-            'property_detail' => 'required' ,
-            'nearest_landmark' => 'required' ,
-            'map_latitude' => 'required' ,
-            'map_longitude' => 'required' ,
-            'display_address' => 'required' ,
-            'product_image1' => 'required' ,
-            'product_image2' => 'required' ,
-            'product_image3' => 'required' ,
-            'product_image4' => 'required' ,
-            'product_image5' => 'required' ,
-            'area' => 'required' ,
-            'area_unit' => 'required' ,
-            'carpet_area' => 'required' ,
-            'bedroom' => 'required' ,
-            'bathroom' => 'required' ,
-            'balconies' => 'required' ,
-            'additional_rooms' => 'required' ,
-            'furnishing_status' => 'required' ,
-            'furnishings' => 'required' ,
-            'total_floors' => 'required' ,
-            'property_on_floor' => 'required' ,
-            'rera_registration_status' => 'required' ,
-            'additional_parking_status' => 'required' ,
-            'parking_covered_count' => 'required' ,
-            'parking_open_count' => 'required' ,
-            'sale_availability' => 'required' ,
-            'possession_by' => 'required' ,
-            'maintenance_charge' => 'required' ,
-            'maintenance_charge_status' => 'required' ,
-            'maintenance_charge_condition' => 'required' ,
-            'ownership' => 'required' ,
-            'expected_pricing' => 'required' ,
-            'inclusive_pricing_details' => 'required' ,
-            'tax_govt_charge' => 'required' ,
-            'price_negotiable' => 'required' ,
-            'deposit' => 'required' ,
-            'brokerage_charges' => 'required' ,
-            'facing_towards' => 'required' ,
-            'availability_condition' => 'required' ,
-            'amenities' => 'required' ,
-            'buildyear' => 'required' ,
-            'age_of_property' => 'required' ,
-            'description' => 'required' ,
-            'equipment' => 'required' ,
-            'features' => 'required' ,
-            'nearby_places' => 'required' ,
+            'user_id' => '' ,
+            'build_name' => '' ,
+            'type' => '' ,
+            'address' => '' ,
+            'city' => '' ,
+            'locality' => '' ,
+            'property_detail' => '' ,
+            'nearest_landmark' => '' ,
+            'map_latitude' => '' ,
+            'map_longitude' => '' ,
+            'display_address' => '' ,
+            'product_image1' => '' ,
+            'product_image2' => '' ,
+            'product_image3' => '' ,
+            'product_image4' => '' ,
+            'product_image5' => '' ,
+            'area' => '' ,
+            'area_unit' => '' ,
+            'carpet_area' => '' ,
+            'bedroom' => '' ,
+            'bathroom' => '' ,
+            'balconies' => '' ,
+            'additional_rooms' => '' ,
+            'furnishing_status' => '' ,
+            'furnishings' => '' ,
+            'total_floors' => '' ,
+            'property_on_floor' => '' ,
+            'rera_registration_status' => '' ,
+            'additional_parking_status' => '' ,
+            'parking_covered_count' => '' ,
+            'parking_open_count' => '' ,
+            'sale_availability' => '' ,
+            'possession_by' => '' ,
+            'maintenance_charge' => '' ,
+            'maintenance_charge_status' => '' ,
+            'maintenance_charge_condition' => '' ,
+            'ownership' => '' ,
+            'expected_pricing' => '' ,
+            'inclusive_pricing_details' => '' ,
+            'tax_govt_charge' => '' ,
+            'price_negotiable' => '' ,
+            'deposit' => '' ,
+            'brokerage_charges' => '' ,
+            'facing_towards' => '' ,
+            'availability_condition' => '' ,
+            'amenities' => '' ,
+            'buildyear' => '' ,
+            'age_of_property' => '' ,
+            'description' => '' ,
+            'equipment' => '' ,
+            'features' => '' ,
+            'nearby_places' => '' ,
         ]);
 
 
@@ -130,10 +130,10 @@ class ProductController extends Controller
         // $file_name = 'image_' . time() . '.jpeg'; //generating unique file name;
 
         // // // storing image in storage/app/public Folder
-        // //     $path = Storage::disk('ftp')->put('/product_image_file'.$file_name, base64_decode($file_data));
+        // //     $path = Storage::disk('public')->put('/product_image_file'.$file_name, base64_decode($file_data));
 
 
-        //     $path = Storage::disk('ftp')->put('product_image_file/'.$file_name, base64_decode($file_data));
+        //     $path = Storage::disk('public')->put('product_image_file/'.$file_name, base64_decode($file_data));
         //     //Image::make($request->file('product_image'));
 
 
@@ -141,35 +141,35 @@ class ProductController extends Controller
         @list($type, $file_data1) = explode(';', $base64_image1);
         @list(, $file_data1) = explode(',', $file_data1);
         $imageName1 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
+        Storage::disk('public')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
 
 
         $base64_image2 = $request->input('product_image2'); // your base64 encoded
         @list($type, $file_data2) = explode(';', $base64_image2);
         @list(, $file_data2) = explode(',', $file_data2);
         $imageName2 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
+        Storage::disk('public')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
 
 
         $base64_image3 = $request->input('product_image3'); // your base64 encoded
         @list($type, $file_data3) = explode(';', $base64_image3);
         @list(, $file_data3) = explode(',', $file_data3);
         $imageName3 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
+        Storage::disk('public')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
 
 
         $base64_image4 = $request->input('product_image4'); // your base64 encoded
         @list($type, $file_data4) = explode(';', $base64_image4);
         @list(, $file_data4) = explode(',', $file_data4);
         $imageName4 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
+        Storage::disk('public')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
 
 
         $base64_image5 = $request->input('product_image5'); // your base64 encoded
         @list($type, $file_data5) = explode(';', $base64_image5);
         @list(, $file_data5) = explode(',', $file_data5);
         $imageName5 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
+        Storage::disk('public')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
 
 
 
@@ -236,6 +236,7 @@ class ProductController extends Controller
             ]);
 
             //product::create($product_data);
+            dd($product_data->getAttributes());
             $product_data->save();
 
             return response()->json([
@@ -319,35 +320,35 @@ class ProductController extends Controller
         @list($type, $file_data1) = explode(';', $base64_image1);
         @list(, $file_data1) = explode(',', $file_data1);
         $imageName1 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
+        Storage::disk('public')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
 
 
         $base64_image2 = $request->input('product_image2'); // your base64 encoded
         @list($type, $file_data2) = explode(';', $base64_image2);
         @list(, $file_data2) = explode(',', $file_data2);
         $imageName2 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
+        Storage::disk('public')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
 
 
         $base64_image3 = $request->input('product_image3'); // your base64 encoded
         @list($type, $file_data3) = explode(';', $base64_image3);
         @list(, $file_data3) = explode(',', $file_data3);
         $imageName3 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
+        Storage::disk('public')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
 
 
         $base64_image4 = $request->input('product_image4'); // your base64 encoded
         @list($type, $file_data4) = explode(';', $base64_image4);
         @list(, $file_data4) = explode(',', $file_data4);
         $imageName4 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
+        Storage::disk('public')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
 
 
         $base64_image5 = $request->input('product_image5'); // your base64 encoded
         @list($type, $file_data5) = explode(';', $base64_image5);
         @list(, $file_data5) = explode(',', $file_data5);
         $imageName5 = 'IMAGE'.Str::random(30).'.'.'png';
-        Storage::disk('ftp')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
+        Storage::disk('public')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
 
 
             $product_data = new Product([
