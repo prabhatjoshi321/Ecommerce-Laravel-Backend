@@ -31,7 +31,7 @@ Route::group([
 
 
     Route::group([
-      'middleware' => 'auth:api'
+      'middleware' => 'auth:api, cors'
     ], function() {
         Route::get('/logout', 'App\Http\Controllers\Api\AuthController@logout');
         Route::get('/user', 'App\Http\Controllers\Api\AuthController@user');
