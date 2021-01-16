@@ -188,7 +188,7 @@ class Response implements ArrayAccess
      */
     public function onError(callable $callback)
     {
-        if ($this->failed()) {
+        if ($this->serverError() || $this->clientError()) {
             $callback($this);
         }
 
@@ -203,16 +203,6 @@ class Response implements ArrayAccess
     public function cookies()
     {
         return $this->cookies;
-    }
-
-    /**
-     * Get the handler stats of the response.
-     *
-     * @return array
-     */
-    public function handlerStats()
-    {
-        return $this->transferStats->getHandlerStats();
     }
 
     /**
@@ -235,14 +225,14 @@ class Response implements ArrayAccess
      */
     public function throw()
     {
-        $callback = func_get_args()[0] ?? null;
+        $callback = func_get_arg(0);
 
-        if ($this->failed()) {
-            throw tap(new RequestException($this), function ($exception) use ($callback) {
-                if ($callback && is_callable($callback)) {
-                    $callback($this, $exception);
-                }
-            });
+        if ($this->serverError() || $this->clientError()) {
+            if ($callback && is_callable($callback)) {
+                $callback($this, $exception = new RequestException($this));
+            }
+
+            throw $exception;
         }
 
         return $this;

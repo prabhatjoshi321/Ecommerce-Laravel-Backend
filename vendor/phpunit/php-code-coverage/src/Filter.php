@@ -10,7 +10,7 @@
 namespace SebastianBergmann\CodeCoverage;
 
 use function array_keys;
-use function is_file;
+use function file_exists;
 use function realpath;
 use function strpos;
 use SebastianBergmann\FileIterator\Facade as FileIteratorFacade;
@@ -90,7 +90,7 @@ final class Filter
             strpos($filename, 'Standard input code') !== false) {
             $isFile = false;
         } else {
-            $isFile = is_file($filename);
+            $isFile = file_exists($filename);
         }
 
         $this->isFileCache[$filename] = $isFile;

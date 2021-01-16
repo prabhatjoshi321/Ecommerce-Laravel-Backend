@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 
 class Route
 {
-    use CreatesRegularExpressionRouteConstraints, Macroable, RouteDependencyResolverTrait;
+    use Macroable, RouteDependencyResolverTrait;
 
     /**
      * The URI pattern the route responds to.
@@ -238,7 +238,8 @@ class Route
      */
     protected function isSerializedClosure()
     {
-        return RouteAction::containsSerializedClosure($this->action);
+        return is_string($this->action['uses']) &&
+               Str::startsWith($this->action['uses'], 'C:32:"Opis\\Closure\\SerializableClosure') !== false;
     }
 
     /**
@@ -302,7 +303,7 @@ class Route
     {
         $this->compileRoute();
 
-        foreach (self::getValidators() as $validator) {
+        foreach ($this->getValidators() as $validator) {
             if (! $includingMethod && $validator instanceof MethodValidator) {
                 continue;
             }
@@ -946,9 +947,9 @@ class Route
 
         $this->computedMiddleware = [];
 
-        return $this->computedMiddleware = Router::uniqueMiddleware(array_merge(
+        return $this->computedMiddleware = array_unique(array_merge(
             $this->middleware(), $this->controllerMiddleware()
-        ));
+        ), SORT_REGULAR);
     }
 
     /**

@@ -15,7 +15,7 @@ use function assert;
 use function defined;
 use function dirname;
 use function explode;
-use function is_file;
+use function file_exists;
 use function is_numeric;
 use function preg_match;
 use function stream_resolve_include_path;
@@ -35,7 +35,6 @@ use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\CodeCoverage;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Filter\Directory as FilterDirectory;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Filter\DirectoryCollection as FilterDirectoryCollection;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Clover;
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Cobertura;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Crap4j;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Html as CodeCoverageHtml;
 use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php as CodeCoveragePhp;
@@ -338,7 +337,7 @@ final class Loader
 
         $file = dirname($filename) . DIRECTORY_SEPARATOR . $path;
 
-        if ($useIncludePath && !is_file($file)) {
+        if ($useIncludePath && !file_exists($file)) {
             $includePathFile = stream_resolve_include_path($path);
 
             if ($includePathFile) {
@@ -451,20 +450,6 @@ final class Loader
             );
         }
 
-        $cobertura = null;
-        $element   = $this->element($xpath, 'coverage/report/cobertura');
-
-        if ($element) {
-            $cobertura = new Cobertura(
-                new File(
-                    $this->toAbsolutePath(
-                        $filename,
-                        (string) $this->getStringAttribute($element, 'outputFile')
-                    )
-                )
-            );
-        }
-
         $crap4j  = null;
         $element = $this->element($xpath, 'coverage/report/crap4j');
 
@@ -552,7 +537,6 @@ final class Loader
             $ignoreDeprecatedCodeUnits,
             $disableCodeCoverageIgnore,
             $clover,
-            $cobertura,
             $crap4j,
             $html,
             $php,
@@ -599,13 +583,12 @@ final class Loader
             }
         }
 
-        $clover    = null;
-        $cobertura = null;
-        $crap4j    = null;
-        $html      = null;
-        $php       = null;
-        $text      = null;
-        $xml       = null;
+        $clover = null;
+        $crap4j = null;
+        $html   = null;
+        $php    = null;
+        $text   = null;
+        $xml    = null;
 
         foreach ($xpath->query('logging/log') as $log) {
             assert($log instanceof DOMElement);
@@ -622,13 +605,6 @@ final class Loader
             switch ($type) {
                 case 'coverage-clover':
                     $clover = new Clover(
-                        new File($target)
-                    );
-
-                    break;
-
-                case 'coverage-cobertura':
-                    $cobertura = new Cobertura(
                         new File($target)
                     );
 
@@ -688,7 +664,6 @@ final class Loader
             $ignoreDeprecatedCodeUnits,
             $disableCodeCoverageIgnore,
             $clover,
-            $cobertura,
             $crap4j,
             $html,
             $php,

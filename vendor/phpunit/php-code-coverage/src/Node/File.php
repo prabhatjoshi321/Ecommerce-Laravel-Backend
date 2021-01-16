@@ -532,7 +532,6 @@ final class File extends AbstractNode
                 'namespace'          => $function['namespace'],
                 'signature'          => $function['signature'],
                 'startLine'          => $function['startLine'],
-                'endLine'            => $function['endLine'],
                 'executableLines'    => 0,
                 'executedLines'      => 0,
                 'executableBranches' => 0,

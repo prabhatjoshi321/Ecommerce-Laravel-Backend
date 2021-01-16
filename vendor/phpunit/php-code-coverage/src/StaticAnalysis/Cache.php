@@ -10,18 +10,15 @@
 namespace SebastianBergmann\CodeCoverage\StaticAnalysis;
 
 use const DIRECTORY_SEPARATOR;
+use function file_exists;
 use function file_get_contents;
 use function file_put_contents;
 use function filemtime;
 use function hash;
-use function is_file;
 use function serialize;
 use function unserialize;
 use SebastianBergmann\CodeCoverage\Directory;
 
-/**
- * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
- */
 abstract class Cache
 {
     /**
@@ -36,11 +33,11 @@ abstract class Cache
         $this->directory = $directory;
     }
 
-    protected function has(string $filename, string $key): bool
+    protected function cacheHas(string $filename, string $method): bool
     {
-        $cacheFile = $this->cacheFile($filename, $key);
+        $cacheFile = $this->cacheFile($filename, $method);
 
-        if (!is_file($cacheFile)) {
+        if (!file_exists($cacheFile)) {
             return false;
         }
 
@@ -56,7 +53,7 @@ abstract class Cache
      *
      * @return mixed
      */
-    protected function read(string $filename, string $key, array $allowedClasses = [])
+    protected function cacheRead(string $filename, string $method, array $allowedClasses = [])
     {
         $options = ['allowed_classes' => false];
 
@@ -66,7 +63,7 @@ abstract class Cache
 
         return unserialize(
             file_get_contents(
-                $this->cacheFile($filename, $key)
+                $this->cacheFile($filename, $method)
             ),
             $options
         );
@@ -75,16 +72,16 @@ abstract class Cache
     /**
      * @param mixed $data
      */
-    protected function write(string $filename, string $key, $data): void
+    protected function cacheWrite(string $filename, string $method, $data): void
     {
         file_put_contents(
-            $this->cacheFile($filename, $key),
+            $this->cacheFile($filename, $method),
             serialize($data)
         );
     }
 
-    private function cacheFile(string $filename, string $key): string
+    protected function cacheFile(string $filename, string $method): string
     {
-        return $this->directory . DIRECTORY_SEPARATOR . hash('sha256', $filename . $key);
+        return $this->directory . DIRECTORY_SEPARATOR . hash('sha256', $filename . $method);
     }
 }

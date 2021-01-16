@@ -14,9 +14,6 @@ use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 
-/**
- * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
- */
 final class ParsingUncoveredFileAnalyser implements UncoveredFileAnalyser
 {
     public function executableLinesIn(string $filename): array

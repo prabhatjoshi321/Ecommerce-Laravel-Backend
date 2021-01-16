@@ -11,9 +11,6 @@ namespace SebastianBergmann\CodeCoverage\StaticAnalysis;
 
 use SebastianBergmann\LinesOfCode\LinesOfCode;
 
-/**
- * @internal This class is not covered by the backward compatibility promise for phpunit/php-code-coverage
- */
 interface CoveredFileAnalyser
 {
     public function classesIn(string $filename): array;

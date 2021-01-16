@@ -14,8 +14,6 @@ use Illuminate\Support\ServiceProvider;
 use Laravel\Passport\Bridge\PersonalAccessGrant;
 use Laravel\Passport\Bridge\RefreshTokenRepository;
 use Laravel\Passport\Guards\TokenGuard;
-use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Parser;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\CryptKey;
 use League\OAuth2\Server\Grant\AuthCodeGrant;
@@ -50,6 +48,10 @@ class PassportServiceProvider extends ServiceProvider
             ], 'passport-views');
 
             $this->publishes([
+                __DIR__.'/../resources/js/components' => base_path('resources/js/components/passport'),
+            ], 'passport-components');
+
+            $this->publishes([
                 __DIR__.'/../config/passport.php' => config_path('passport.php'),
             ], 'passport-config');
 
@@ -71,7 +73,7 @@ class PassportServiceProvider extends ServiceProvider
     protected function registerMigrations()
     {
         if (Passport::$runsMigrations && ! config('passport.client_uuids')) {
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            return $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
     }
 
@@ -88,7 +90,6 @@ class PassportServiceProvider extends ServiceProvider
 
         $this->registerAuthorizationServer();
         $this->registerClientRepository();
-        $this->registerJWTParser();
         $this->registerResourceServer();
         $this->registerGuard();
     }
@@ -227,18 +228,6 @@ class PassportServiceProvider extends ServiceProvider
             $config = $container->make('config')->get('passport.personal_access_client');
 
             return new ClientRepository($config['id'] ?? null, $config['secret'] ?? null);
-        });
-    }
-
-    /**
-     * Register the JWT Parser.
-     *
-     * @return void
-     */
-    protected function registerJWTParser()
-    {
-        $this->app->singleton(Parser::class, function () {
-            return Configuration::forUnsecuredSigner()->parser();
         });
     }
 

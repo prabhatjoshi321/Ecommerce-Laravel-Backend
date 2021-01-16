@@ -1036,7 +1036,7 @@ trait ValidatesAttributes
      */
     public function validateImage($attribute, $value)
     {
-        return $this->validateMimes($attribute, $value, ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
+        return $this->validateMimes($attribute, $value, ['jpeg', 'png', 'gif', 'bmp', 'svg', 'webp']);
     }
 
     /**
@@ -1142,11 +1142,7 @@ trait ValidatesAttributes
      */
     public function validateJson($attribute, $value)
     {
-        if (is_array($value)) {
-            return false;
-        }
-
-        if (! is_scalar($value) && ! is_null($value) && ! method_exists($value, '__toString')) {
+        if (! is_scalar($value) && ! method_exists($value, '__toString')) {
             return false;
         }
 
@@ -1190,10 +1186,6 @@ trait ValidatesAttributes
 
         if ($this->shouldBlockPhpUpload($value, $parameters)) {
             return false;
-        }
-
-        if (in_array('jpg', $parameters) || in_array('jpeg', $parameters)) {
-            $parameters = array_unique(array_merge($parameters, ['jpg', 'jpeg']));
         }
 
         return $value->getPath() !== '' && in_array($value->guessExtension(), $parameters);
@@ -1257,29 +1249,6 @@ trait ValidatesAttributes
         $this->requireParameterCount(1, $parameters, 'min');
 
         return $this->getSize($attribute, $value) >= $parameters[0];
-    }
-
-    /**
-     * Validate the value of an attribute is a multiple of a given value.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @param  array  $parameters
-     * @return bool
-     */
-    public function validateMultipleOf($attribute, $value, $parameters)
-    {
-        $this->requireParameterCount(1, $parameters, 'multiple_of');
-
-        if (! $this->validateNumeric($attribute, $value) || ! $this->validateNumeric($attribute, $parameters[0])) {
-            return false;
-        }
-
-        if ((float) $parameters[0] === 0.0) {
-            return false;
-        }
-
-        return bcmod($value, $parameters[0], 16) === '0.0000000000000000';
     }
 
     /**
@@ -1883,7 +1852,7 @@ trait ValidatesAttributes
      * @param  array  $parameters
      * @return array
      */
-    public function parseNamedParameters($parameters)
+    protected function parseNamedParameters($parameters)
     {
         return array_reduce($parameters, function ($result, $item) {
             [$key, $value] = array_pad(explode('=', $item, 2), 2, null);

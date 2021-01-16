@@ -264,7 +264,6 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
         } elseif (empty($client->getRedirectUri()) ||
             (\is_array($client->getRedirectUri()) && \count($client->getRedirectUri()) !== 1)) {
             $this->getEmitter()->emit(new RequestEvent(RequestEvent::CLIENT_AUTHENTICATION_FAILED, $request));
-
             throw OAuthServerException::invalidClient($request);
         }
 
@@ -311,7 +310,7 @@ class AuthCodeGrant extends AbstractAuthorizeGrant
             // @see: https://tools.ietf.org/html/rfc7636#section-4.2
             if (\preg_match('/^[A-Za-z0-9-._~]{43,128}$/', $codeChallenge) !== 1) {
                 throw OAuthServerException::invalidRequest(
-                    'code_challenge',
+                    'code_challenged',
                     'Code challenge must follow the specifications of RFC-7636.'
                 );
             }

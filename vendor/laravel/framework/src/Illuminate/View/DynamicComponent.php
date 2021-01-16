@@ -32,7 +32,6 @@ class DynamicComponent extends Component
     /**
      * Create a new component instance.
      *
-     * @param  string  $component
      * @return void
      */
     public function __construct(string $component)
@@ -43,7 +42,7 @@ class DynamicComponent extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|string
+     * @return \Illuminate\View\View|string
      */
     public function render()
     {

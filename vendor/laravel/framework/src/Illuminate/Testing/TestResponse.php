@@ -327,7 +327,7 @@ class TestResponse implements ArrayAccess
         $expiresAt = Carbon::createFromTimestamp($cookie->getExpiresTime());
 
         PHPUnit::assertTrue(
-            0 !== $cookie->getExpiresTime() && $expiresAt->lessThan(Carbon::now()),
+            $expiresAt->lessThan(Carbon::now()),
             "Cookie [{$cookieName}] is not expired, it expires at [{$expiresAt}]."
         );
 
@@ -350,7 +350,7 @@ class TestResponse implements ArrayAccess
         $expiresAt = Carbon::createFromTimestamp($cookie->getExpiresTime());
 
         PHPUnit::assertTrue(
-            0 === $cookie->getExpiresTime() || $expiresAt->greaterThan(Carbon::now()),
+            $expiresAt->greaterThan(Carbon::now()),
             "Cookie [{$cookieName}] is expired, it expired at [{$expiresAt}]."
         );
 
@@ -389,21 +389,17 @@ class TestResponse implements ArrayAccess
     }
 
     /**
-     * Assert that the given string or array of strings are contained within the response.
+     * Assert that the given string is contained within the response.
      *
-     * @param  string|array  $value
+     * @param  string  $value
      * @param  bool  $escape
      * @return $this
      */
     public function assertSee($value, $escape = true)
     {
-        $value = Arr::wrap($value);
+        $value = $escape ? e($value) : $value;
 
-        $values = $escape ? array_map('e', ($value)) : $value;
-
-        foreach ($values as $value) {
-            PHPUnit::assertStringContainsString((string) $value, $this->getContent());
-        }
+        PHPUnit::assertStringContainsString((string) $value, $this->getContent());
 
         return $this;
     }
@@ -425,23 +421,17 @@ class TestResponse implements ArrayAccess
     }
 
     /**
-     * Assert that the given string or array of strings are contained within the response text.
+     * Assert that the given string is contained within the response text.
      *
-     * @param  string|array  $value
+     * @param  string  $value
      * @param  bool  $escape
      * @return $this
      */
     public function assertSeeText($value, $escape = true)
     {
-        $value = Arr::wrap($value);
+        $value = $escape ? e($value) : $value;
 
-        $values = $escape ? array_map('e', ($value)) : $value;
-
-        tap(strip_tags($this->getContent()), function ($content) use ($values) {
-            foreach ($values as $value) {
-                PHPUnit::assertStringContainsString((string) $value, $content);
-            }
-        });
+        PHPUnit::assertStringContainsString((string) $value, strip_tags($this->getContent()));
 
         return $this;
     }
@@ -463,43 +453,33 @@ class TestResponse implements ArrayAccess
     }
 
     /**
-     * Assert that the given string or array of strings are not contained within the response.
+     * Assert that the given string is not contained within the response.
      *
-     * @param  string|array  $value
+     * @param  string  $value
      * @param  bool  $escape
      * @return $this
      */
     public function assertDontSee($value, $escape = true)
     {
-        $value = Arr::wrap($value);
+        $value = $escape ? e($value) : $value;
 
-        $values = $escape ? array_map('e', ($value)) : $value;
-
-        foreach ($values as $value) {
-            PHPUnit::assertStringNotContainsString((string) $value, $this->getContent());
-        }
+        PHPUnit::assertStringNotContainsString((string) $value, $this->getContent());
 
         return $this;
     }
 
     /**
-     * Assert that the given string or array of strings are not contained within the response text.
+     * Assert that the given string is not contained within the response text.
      *
-     * @param  string|array  $value
+     * @param  string  $value
      * @param  bool  $escape
      * @return $this
      */
     public function assertDontSeeText($value, $escape = true)
     {
-        $value = Arr::wrap($value);
+        $value = $escape ? e($value) : $value;
 
-        $values = $escape ? array_map('e', ($value)) : $value;
-
-        tap(strip_tags($this->getContent()), function ($content) use ($values) {
-            foreach ($values as $value) {
-                PHPUnit::assertStringNotContainsString((string) $value, $content);
-            }
-        });
+        PHPUnit::assertStringNotContainsString((string) $value, strip_tags($this->getContent()));
 
         return $this;
     }

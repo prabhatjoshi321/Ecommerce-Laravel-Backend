@@ -62,7 +62,7 @@ class BladeCompiler extends Compiler implements CompilerInterface
     /**
      * All of the available compiler functions.
      *
-     * @var string[]
+     * @var array
      */
     protected $compilers = [
         // 'Comments',
@@ -74,21 +74,21 @@ class BladeCompiler extends Compiler implements CompilerInterface
     /**
      * Array of opening and closing tags for raw echos.
      *
-     * @var string[]
+     * @var array
      */
     protected $rawTags = ['{!!', '!!}'];
 
     /**
      * Array of opening and closing tags for regular echos.
      *
-     * @var string[]
+     * @var array
      */
     protected $contentTags = ['{{', '}}'];
 
     /**
      * Array of opening and closing tags for escaped echos.
      *
-     * @var string[]
+     * @var array
      */
     protected $escapedTags = ['{{{', '}}}'];
 
@@ -575,9 +575,9 @@ class BladeCompiler extends Compiler implements CompilerInterface
     {
         foreach ($components as $key => $value) {
             if (is_numeric($key)) {
-                $this->component($value, null, $prefix);
+                static::component($value, null, $prefix);
             } else {
-                $this->component($key, $value, $prefix);
+                static::component($key, $value, $prefix);
             }
         }
     }

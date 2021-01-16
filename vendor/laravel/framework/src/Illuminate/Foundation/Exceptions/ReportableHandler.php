@@ -42,11 +42,7 @@ class ReportableHandler
      */
     public function __invoke(Throwable $e)
     {
-        $result = call_user_func($this->callback, $e);
-
-        if ($result === false) {
-            return false;
-        }
+        call_user_func($this->callback, $e);
 
         return ! $this->shouldStop;
     }

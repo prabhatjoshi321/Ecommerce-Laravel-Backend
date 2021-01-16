@@ -70,7 +70,6 @@ use PHPUnit\Framework\Constraint\LogicalAnd;
 use PHPUnit\Framework\Constraint\LogicalNot;
 use PHPUnit\Framework\Constraint\LogicalOr;
 use PHPUnit\Framework\Constraint\LogicalXor;
-use PHPUnit\Framework\Constraint\ObjectEquals;
 use PHPUnit\Framework\Constraint\ObjectHasAttribute;
 use PHPUnit\Framework\Constraint\RegularExpression;
 use PHPUnit\Framework\Constraint\SameSize;
@@ -86,7 +85,7 @@ use PHPUnit\Util\Xml;
 use PHPUnit\Util\Xml\Loader as XmlLoader;
 
 /**
- * @no-named-arguments Parameter names are not covered by the backward compatibility promise for PHPUnit
+ * A set of assertion methods.
  */
 abstract class Assert
 {
@@ -427,18 +426,6 @@ abstract class Assert
         );
 
         static::assertThat($actual, $constraint, $message);
-    }
-
-    /**
-     * @throws ExpectationFailedException
-     */
-    public static function assertObjectEquals(object $expected, object $actual, string $method = 'equals', string $message = ''): void
-    {
-        static::assertThat(
-            $actual,
-            static::objectEquals($expected, $method),
-            $message
-        );
     }
 
     /**
@@ -1365,7 +1352,7 @@ abstract class Assert
      *
      * @psalm-template ExpectedType of object
      * @psalm-param class-string<ExpectedType> $expected
-     * @psalm-assert =ExpectedType $actual
+     * @psalm-assert ExpectedType $actual
      */
     public static function assertInstanceOf(string $expected, $actual, string $message = ''): void
     {
@@ -2726,11 +2713,6 @@ abstract class Assert
     public static function countOf(int $count): Count
     {
         return new Count($count);
-    }
-
-    public static function objectEquals(object $object, string $method = 'equals'): ObjectEquals
-    {
-        return new ObjectEquals($object, $method);
     }
 
     /**

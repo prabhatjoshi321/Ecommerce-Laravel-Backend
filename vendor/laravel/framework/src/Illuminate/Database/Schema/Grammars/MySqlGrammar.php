@@ -12,7 +12,7 @@ class MySqlGrammar extends Grammar
     /**
      * The possible column modifiers.
      *
-     * @var string[]
+     * @var array
      */
     protected $modifiers = [
         'Unsigned', 'Charset', 'Collate', 'VirtualAs', 'StoredAs', 'Nullable',
@@ -22,7 +22,7 @@ class MySqlGrammar extends Grammar
     /**
      * The possible column serials.
      *
-     * @var string[]
+     * @var array
      */
     protected $serials = ['bigInteger', 'integer', 'mediumInteger', 'smallInteger', 'tinyInteger'];
 
@@ -706,11 +706,9 @@ class MySqlGrammar extends Grammar
     {
         $columnType = $column->precision ? "timestamp($column->precision)" : 'timestamp';
 
-        $current = $column->precision ? "CURRENT_TIMESTAMP($column->precision)" : 'CURRENT_TIMESTAMP';
+        $defaultCurrent = $column->precision ? "CURRENT_TIMESTAMP($column->precision)" : 'CURRENT_TIMESTAMP';
 
-        $columnType = $column->useCurrent ? "$columnType default $current" : $columnType;
-
-        return $column->useCurrentOnUpdate ? "$columnType on update $current" : $columnType;
+        return $column->useCurrent ? "$columnType default $defaultCurrent" : $columnType;
     }
 
     /**
