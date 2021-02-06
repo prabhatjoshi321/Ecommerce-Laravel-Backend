@@ -48,13 +48,20 @@ Route::group([
     Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
     Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
     Route::post('/requ', 'App\Http\Controllers\Api\RequirementController@create');
+    Route::post('/req_index', 'App\Http\Controllers\Api\RequirementController@reqHandler');
+
+    Route::post('/insert_product_sale', 'App\Http\Controllers\Api\ProductController@first');
+    Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@second');
+
+    Route::post('/save_search', 'App\Http\Controllers\Api\SavedsearchesController@store');
+    Route::post('/get_search', 'App\Http\Controllers\Api\SavedsearchesController@index');
 
     Route::group([
       'middleware' => 'auth:api'
     ], function() {
-        Route::post('/insert_product_sale', 'App\Http\Controllers\Api\ProductController@create_sale');
-        Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@create_rent');
+
 
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
 });
+

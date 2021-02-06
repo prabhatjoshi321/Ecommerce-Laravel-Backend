@@ -3,6 +3,7 @@
 namespace Facade\Ignition;
 
 use Exception;
+use Facade\FlareClient\Api;
 use Facade\FlareClient\Flare;
 use Facade\FlareClient\Http\Client;
 use Facade\Ignition\Commands\SolutionMakeCommand;
@@ -39,6 +40,8 @@ use Facade\Ignition\SolutionProviders\MergeConflictSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingAppKeySolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingColumnSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingImportSolutionProvider;
+use Facade\Ignition\SolutionProviders\MissingLivewireComponentSolutionProvider;
+use Facade\Ignition\SolutionProviders\MissingMixManifestSolutionProvider;
 use Facade\Ignition\SolutionProviders\MissingPackageSolutionProvider;
 use Facade\Ignition\SolutionProviders\RunningLaravelDuskInProductionProvider;
 use Facade\Ignition\SolutionProviders\SolutionProviderRepository;
@@ -76,6 +79,10 @@ class IgnitionServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../config/ignition.php' => config_path('ignition.php'),
             ], 'ignition-config');
+
+            if (['artisan', 'tinker'] === $_SERVER['argv']) {
+                Api::sendReportsInBatches(false);
+            }
         }
 
         $this
@@ -129,6 +136,10 @@ class IgnitionServiceProvider extends ServiceProvider
         });
 
         $this->app->make('view.engine.resolver')->register('blade', function () {
+            if (class_exists(\Livewire\CompilerEngineForIgnition::class)) {
+                return new \Livewire\CompilerEngineForIgnition($this->app['blade.compiler']);
+            }
+
             return new CompilerEngine($this->app['blade.compiler']);
         });
 
@@ -371,6 +382,8 @@ class IgnitionServiceProvider extends ServiceProvider
             MissingColumnSolutionProvider::class,
             UnknownValidationSolutionProvider::class,
             UndefinedPropertySolutionProvider::class,
+            MissingMixManifestSolutionProvider::class,
+            MissingLivewireComponentSolutionProvider::class,
         ];
     }
 

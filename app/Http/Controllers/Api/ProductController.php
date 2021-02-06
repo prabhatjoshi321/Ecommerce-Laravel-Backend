@@ -537,6 +537,343 @@ $mer = array_merge($mer, $merged1);
 
 
 
+    public function first(Request $request)
+    {
+        $request -> validate([
+            'user_id' => '',
+            'build_name' => '',
+            'type' => '',
+            'address' => '' ,
+            'city' => '' ,
+            'locality' => '' ,
+            'property_detail' => '' ,
+            'nearest_landmark' => '' ,
+            'map_latitude' => '' ,
+            'map_longitude' => '' ,
+            'display_address' => '' ,
+            'product_image1' => '' ,
+            'product_image2' => '' ,
+            'product_image3' => '' ,
+            'product_image4' => '' ,
+            'product_image5' => '' ,
+            'area' => '' ,
+            'area_unit' => '' ,
+            'carpet_area' => '' ,
+            'bedroom' => '' ,
+            'bathroom' => '' ,
+            'balconies' => '' ,
+            'additional_rooms' => '' ,
+            'furnishing_status' => '' ,
+            'furnishings' => '' ,
+            'total_floors' => '' ,
+            'property_on_floor' => '' ,
+            'rera_registration_status' => '' ,
+            'additional_parking_status' => '' ,
+            'parking_covered_count' => '' ,
+            'parking_open_count' => '' ,
+            'sale_availability' => '' ,
+            'possession_by' => '' ,
+            'maintenance_charge' => '' ,
+            'maintenance_charge_status' => '' ,
+            'maintenance_charge_condition' => '' ,
+            'ownership' => '' ,
+            'expected_pricing' => '' ,
+            'inclusive_pricing_details' => '' ,
+            'tax_govt_charge' => '' ,
+            'price_negotiable' => '' ,
+            'deposit' => '' ,
+            'brokerage_charges' => '' ,
+            'facing_towards' => '' ,
+            'availability_condition' => '' ,
+            'amenities' => '' ,
+            'buildyear' => '' ,
+            'age_of_property' => '' ,
+            'description' => '' ,
+            'equipment' => '' ,
+            'features' => '' ,
+            'nearby_places' => '' ,
+        ]);
+
+
+
+        $base64_image1 = $request->input('product_image1'); // your base64 encoded
+        @list($type, $file_data1) = explode(';', $base64_image1);
+        @list(, $file_data1) = explode(',', $file_data1);
+        $imageName1 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
+
+
+        $base64_image2 = $request->input('product_image2'); // your base64 encoded
+        @list($type, $file_data2) = explode(';', $base64_image2);
+        @list(, $file_data2) = explode(',', $file_data2);
+        $imageName2 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
+
+
+        $base64_image3 = $request->input('product_image3'); // your base64 encoded
+        @list($type, $file_data3) = explode(';', $base64_image3);
+        @list(, $file_data3) = explode(',', $file_data3);
+        $imageName3 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
+
+
+        $base64_image4 = $request->input('product_image4'); // your base64 encoded
+        @list($type, $file_data4) = explode(';', $base64_image4);
+        @list(, $file_data4) = explode(',', $file_data4);
+        $imageName4 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
+
+
+        $base64_image5 = $request->input('product_image5'); // your base64 encoded
+        @list($type, $file_data5) = explode(';', $base64_image5);
+        @list(, $file_data5) = explode(',', $file_data5);
+        $imageName5 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
+
+
+
+        $product_data = new Product([
+            'user_id' => $request->user_id,
+            'build_name' => $request->build_name,
+            'type' => $request->type,
+            'address' => $request->address,
+            'city' => $request->city,
+            'locality' => $request->locality,
+            'property_detail' => $request->property_detail,
+            'nearest_landmark' => $request->nearest_landmark,
+            'map_latitude' => $request->map_latitude,
+            'map_longitude' => $request->map_longitude,
+            'display_address' => $request->display_address,
+            'product_image1' => 'product_image_file/'.$imageName1,
+            'product_image2' => 'product_image_file/'.$imageName2,
+            'product_image3' => 'product_image_file/'.$imageName3,
+            'product_image4' => 'product_image_file/'.$imageName4,
+            'product_image5' => 'product_image_file/'.$imageName5,
+            'area' => $request->area,
+            'area_unit' => $request->area_unit,
+            'carpet_area' => $request->carpet_area,
+            'bedroom' => $request->bedroom,
+            'bathroom' => $request->bathroom,
+            'balconies' => $request->balconies,
+            'additional_rooms' => $request->additional_rooms,
+            'furnishing_status' => $request->furnishing_status,
+            'furnishings' => json_encode($request->furnishings),
+            'total_floors' => $request->total_floors,
+            'property_on_floor' => $request->property_on_floor,
+            'rera_registration_status' => $request->rera_registration_status,
+            'additional_parking_status' => $request->additional_parking_status,
+            'parking_covered_count' => $request->parking_covered_count,
+            'parking_open_count' => $request->parking_open_count,
+            'sale_availability' => $request->sale_availability,
+            'possession_by' => $request->possession_by,
+            'ownership' => $request->ownership,
+            'expected_pricing' => $request->expected_pricing,
+            'inclusive_pricing_details' => $request->inclusive_pricing_details,
+            'tax_govt_charge' => $request->tax_govt_charge,
+            'price_negotiable' => $request->price_negotiable,
+            'maintenance_charge_status' => $request->maintenance_charge_status,
+            'maintenance_charge' => $request->maintenance_charge,
+            'maintenance_charge_condition' => $request->maintenance_charge_condition,
+            'deposit' => $request->deposit,
+            'brokerage_charges' => $request->brokerage_charges,
+            'facing_towards' => $request->facing_towards,
+            'availability_condition' => $request->availability_condition,
+            'amenities' => json_encode($request->amenities),
+            'buildyear' => $request->buildyear,
+            'age_of_property' => $request->age_of_property,
+            'description' => $request->description,
+            'equipment' => $request->equipment,
+            'features' => $request->features,
+            'nearby_places' => $request->nearby_places,
+        ]);
+
+        $product_data-> save();
+
+        return response()->json([
+                'message' => 'Successfully inserted product for sale',
+            ], 201);
+
+    }
+
+
+    public function second(Request $request)
+    {
+        $request -> validate([
+            'user_id' => '' ,
+            'build_name' => '' ,
+            'type' => '' ,
+            'willing_to_rent_out_to' => '' ,
+            'agreement_type' => '' ,
+            'address' => '' ,
+            'display_address' => '' ,
+            'city' => '' ,
+            'locality' => '' ,
+            'property_detail' => '' ,
+            'nearest_landmark' => '' ,
+            'map_latitude' => '' ,
+            'map_longitude' => '' ,
+            'product_image1' => '' ,
+            'product_image2' => '' ,
+            'product_image3' => '' ,
+            'product_image4' => '' ,
+            'product_image5' => '' ,
+            'nearby_places' => '' ,
+            'area' => '' ,
+            'area_unit' => '' ,
+            'carpet_area' => '' ,
+            'bedroom' => '' ,
+            'bathroom' => '' ,
+            'balconies' => '' ,
+            'additional_rooms' => '' ,
+            'furnishing_status' => '' ,
+            'furnishings' => '' ,
+            'total_floors' => '' ,
+            'property_on_floor' => '' ,
+            'rera_registration_status' => '' ,
+            'additional_parking_status' => '' ,
+            'parking_covered_count' => '' ,
+            'parking_open_count' => '' ,
+            'rent_availability' => '' ,
+            'available_for' => '' ,
+            'buildyear' => '' ,
+            'age_of_property' => '' ,
+            'possession_by' => '' ,
+            'duration_of_rent_aggreement' => '' ,
+            'security_deposit' => '' ,
+            'maintenance_charge' => '',
+            'maintenance_charge_status' => '' ,
+            'maintenance_charge_condition' => '' ,
+            'ownership' => '' ,
+            'rent_cond' => '' ,
+            'expected_pricing' => '' ,
+            'inclusive_pricing_details' => '' ,
+            'tax_govt_charge' => '' ,
+            'price_negotiable' => '' ,
+            'deposit' => '' ,
+            'brokerage_charges' => '' ,
+            'amenities' => '' ,
+            'facing_towards' => '' ,
+            'availability_condition' => '' ,
+            'expected_rent' => '' ,
+            'inc_electricity_and_water_bill' => '' ,
+            'month_of_notice' => '' ,
+            'equipment' => '' ,
+            'features' => '' ,
+            'description' => '' ,
+        ]);
+
+
+
+        $base64_image1 = $request->input('product_image1'); // your base64 encoded
+        @list($type, $file_data1) = explode(';', $base64_image1);
+        @list(, $file_data1) = explode(',', $file_data1);
+        $imageName1 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName1, base64_decode($file_data1));
+
+
+        $base64_image2 = $request->input('product_image2'); // your base64 encoded
+        @list($type, $file_data2) = explode(';', $base64_image2);
+        @list(, $file_data2) = explode(',', $file_data2);
+        $imageName2 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName2, base64_decode($file_data2));
+
+
+        $base64_image3 = $request->input('product_image3'); // your base64 encoded
+        @list($type, $file_data3) = explode(';', $base64_image3);
+        @list(, $file_data3) = explode(',', $file_data3);
+        $imageName3 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName3, base64_decode($file_data3));
+
+
+        $base64_image4 = $request->input('product_image4'); // your base64 encoded
+        @list($type, $file_data4) = explode(';', $base64_image4);
+        @list(, $file_data4) = explode(',', $file_data4);
+        $imageName4 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName4, base64_decode($file_data4));
+
+
+        $base64_image5 = $request->input('product_image5'); // your base64 encoded
+        @list($type, $file_data5) = explode(';', $base64_image5);
+        @list(, $file_data5) = explode(',', $file_data5);
+        $imageName5 = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('product_image_file/'.$imageName5, base64_decode($file_data5));
+
+
+            $product_data = new Product([
+            'user_id' => $request->user_id ,
+            'build_name' => $request->build_name ,
+            'type' => $request->type ,
+            'willing_to_rent_out_to' => $request->willing_to_rent_out_to ,
+            'agreement_type' => $request->agreement_type ,
+            'address' => $request->address ,
+            'display_address' => $request->display_address ,
+            'city' => $request->city ,
+            'locality' => $request->locality ,
+            'property_detail' => $request->property_detail ,
+            'nearest_landmark' => $request->nearest_landmark ,
+            'map_latitude' => $request->map_latitude ,
+            'map_longitude' => $request->map_longitude ,
+            'product_image1' => 'product_image_file/'.$imageName1,
+            'product_image2' => 'product_image_file/'.$imageName2,
+            'product_image3' => 'product_image_file/'.$imageName3,
+            'product_image4' => 'product_image_file/'.$imageName4,
+            'product_image5' => 'product_image_file/'.$imageName5,
+            'nearby_places' => $request->nearby_places ,
+            'area' => $request->area ,
+            'area_unit' => $request->area_unit ,
+            'carpet_area' => $request->carpet_area ,
+            'bedroom' => $request->bedroom ,
+            'bathroom' => $request->bathroom ,
+            'balconies' => $request->balconies ,
+            'additional_rooms' => $request->additional_rooms ,
+            'furnishing_status' => $request->furnishing_status ,
+            'furnishings' => json_encode($request->furnishings) ,
+            'total_floors' => $request->total_floors ,
+            'property_on_floor' => $request->property_on_floor ,
+            'rera_registration_status' => $request->rera_registration_status ,
+            'additional_parking_status' => $request->additional_parking_status ,
+            'parking_covered_count' => $request->parking_covered_count ,
+            'parking_open_count' => $request->parking_open_count ,
+            'rent_availability' => $request->rent_availability ,
+            'available_for' => $request->available_for ,
+            'buildyear' => $request->buildyear ,
+            'age_of_property' => $request->age_of_property ,
+            'possession_by' => $request->possession_by ,
+            'duration_of_rent_aggreement' => $request->duration_of_rent_aggreement ,
+            'security_deposit' => $request->security_deposit ,
+            'maintenance_charge' =>$request->maintenance_charge ,
+            'maintenance_charge_status' => $request->maintenance_charge_status ,
+            'maintenance_charge_condition' => $request->maintenance_charge_condition ,
+            'ownership' => $request->ownership ,
+            'rent_cond' => $request->rent_cond ,
+            'expected_pricing' => $request->expected_pricing ,
+            'inclusive_pricing_details' => $request->inclusive_pricing_details ,
+            'tax_govt_charge' => $request->tax_govt_charge ,
+            'price_negotiable' => $request->price_negotiable ,
+            'deposit' => $request->deposit ,
+            'brokerage_charges' => $request->brokerage_charges ,
+            'amenities' => json_encode($request->amenities) ,
+            'facing_towards' => $request->facing_towards ,
+            'availability_condition' => $request->availability_condition ,
+            'expected_rent' => $request->expected_rent ,
+            'inc_electricity_and_water_bill' => $request->inc_electricity_and_water_bill ,
+            'month_of_notice' => $request->month_of_notice ,
+            'equipment' => $request->equipment ,
+            'features' => $request->features ,
+            'description' => $request->description ,
+            ]);
+
+            //product::create($product_data);
+            $product_data->save();
+
+            return response()->json([
+                'message' => 'Successfully inserted product for rent',
+                'path' => $product_data,
+            ], 201);
+
+    }
+
+
 
     public function store(Request $request)
     {

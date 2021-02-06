@@ -11,6 +11,11 @@ class requirement extends Model
 
     protected $fillable = [
         'user_id',
+        'rental_sale_condition',
+        'purchase_mode',
+        'cash_amount',
+        'loan_amount',
+        'property_type',
         'requirement',
     ];
 }
