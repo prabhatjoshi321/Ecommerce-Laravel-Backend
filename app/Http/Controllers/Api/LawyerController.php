@@ -37,9 +37,9 @@ class LawyerController extends Controller
 
 
         $request -> validate([
-            'service_name',
-            'service_details',
-            'price'
+            'service_name' => 'required',
+            'service_details' => 'required',
+            'price' => 'required'
         ]);
 
         $user_id = Auth::user()->id;
