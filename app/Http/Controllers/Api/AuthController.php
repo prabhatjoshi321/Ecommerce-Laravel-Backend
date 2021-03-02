@@ -197,9 +197,15 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
         if(!Auth::attempt($credentials))
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Invalid Username or Password'
             ], 401);
         $user = $request->user();
+
+        if ($user->blocked == 1)
+            return response()->json([
+                'message' => 'Your account is blocked'
+            ], 403);
+
         $tokenResult = $user->createToken('Personal Access Token');
         $token = $tokenResult->token;
         if ($request->remember_me)
@@ -228,4 +234,68 @@ class AuthController extends Controller
     public function user(Request $request){
         return response()->json($request->user());
     }
+
+
+    public function admin_signup(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|string|unique:users',
+            'profile_pic' => 'required',
+            'other_mobile_number' => 'required|integer|between:1000000000,9999999999',
+            'password' => 'required|string|confirmed'
+        ]);
+
+        $base64_image = $request->input('profile_pic'); // your base64 encoded
+        @list($type, $file_data) = explode(';', $base64_image);
+        @list(, $file_data) = explode(',', $file_data);
+        $imageName = 'IMAGE'.Str::random(30).'.'.'png';
+        Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+
+        $user = new User([
+            'name' => $request->name,
+            'email' => $request->email,
+            'profile_pic' => 'profile_image_file/'.$imageName,
+            'usertype' => 11,
+            'other_mobile_number' => $request->other_mobile_number,
+            'password' => bcrypt($request->password)
+        ]);
+
+        $user->save();
+
+        return response()->json([
+            'data' => $user,
+            'message' => 'Successfully created admin!'
+        ], 201);
+    }
+
+    public function admin_login(Request $request){
+
+        $request->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+        ]);
+        $credentials = request(['email', 'password']);
+        if(!Auth::attempt($credentials))
+            return response()->json([
+                'message' => 'Invalid Admin Credentials'
+            ], 401);
+        $user = $request->user();
+        $tokenResult = $user->createToken('Personal Access Token');
+        $token = $tokenResult->token;
+        $token->expires_at = Carbon::now()->addWeeks(20);
+        $token->save();
+        return response()->json([
+            'username' => $user->name,
+            'id' => $user->id,
+            'usertype' => $user->usertype,
+            'access_token' => $tokenResult->accessToken,
+            'token_type' => 'Bearer',
+            'expires_at' => Carbon::parse(
+                $tokenResult->token->expires_at
+            )->toDateTimeString(),
+            'misc' => $user
+        ]);
+    }
+
+
 }

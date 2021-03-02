@@ -6,6 +6,9 @@ use App\Models\savedsearches;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Database\Seeders\SavedsearchesSeeder;
+use Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class SavedsearchesController extends Controller
 {
@@ -14,15 +17,12 @@ class SavedsearchesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $request->validate([
-            'user_id' => 'required',
-        ]);
 
-        $id = $request->user_id;
+        $id = Auth::user()->id;
 
-        $products = DB::table('savedsearches')->select('product_id')->where('user_id', $id)->value("value");
+        $products = DB::table('savedsearches')->select('product_id')->where('user_id', $id)->get();
 
         return response() -> json ([
             'data' => $products
@@ -49,29 +49,28 @@ class SavedsearchesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required',
             'product_id' => 'required'
         ]);
 
+
+        $user_id = Auth::user()->id;
+
         $saved_searches = new Savedsearches([
-            'user_id' => $request->user_id,
+            'user_id' => $user_id,
             'product_id' => $request->product_id
         ]);
 
         $saved_searches -> save();
 
         return response() -> json ([
-            'message' => 'successfull'
+            'message' => 'success'
         ], 201);
 
     }
 
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\savedsearches  $savedsearches
+        /**     rches
      * @return \Illuminate\Http\Response
      */
     public function show(savedsearches $savedsearches)

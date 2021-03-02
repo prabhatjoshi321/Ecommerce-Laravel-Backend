@@ -16,6 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
+            $table->integer('view_counter')->default('0');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
             $table->string('rent_cond')->nullable();
@@ -77,6 +78,7 @@ class CreateProductsTable extends Migration
             $table->string('nearest_landmark')->nullable();
             $table->string('map_latitude')->nullable();
             $table->string('map_longitude')->nullable();
+            $table->boolean('delete_flag')->default(0);
             $table->timestamps();
         });
     }

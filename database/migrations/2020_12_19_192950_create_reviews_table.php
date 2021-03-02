@@ -21,6 +21,8 @@ class CreateReviewsTable extends Migration
             $table->string('stars');
             $table->string('rav_subject');
             $table->longText('rev_content');
+            $table->boolean('delete_flag')->default(0);
+
             $table->timestamps();
         });
     }

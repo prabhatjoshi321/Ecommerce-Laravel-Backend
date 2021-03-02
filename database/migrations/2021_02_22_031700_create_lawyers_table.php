@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLastSearchedPropertiesTable extends Migration
+class CreateLawyersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateLastSearchedPropertiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('last_searched_properties', function (Blueprint $table) {
+        Schema::create('lawyers', function (Blueprint $table) {
             $table->id();
-            $table->boolean('delete_flag')->default(0);
-
+            $table->integer('user_id');
+            $table->string('service_name');
+            $table->string('service_details');
+            $table->string('price');
+            $table->string('delete_flag')->default(0);
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateLastSearchedPropertiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('last_searched_properties');
+        Schema::dropIfExists('lawyers');
     }
 }

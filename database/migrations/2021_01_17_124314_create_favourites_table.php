@@ -15,6 +15,10 @@ class CreateFavouritesTable extends Migration
     {
         Schema::create('favourites', function (Blueprint $table) {
             $table->id();
+            $table->integer("user_id");
+            $table->integer("saved_searches");
+            $table->boolean('delete_flag')->default(0);
+
             $table->timestamps();
         });
     }

@@ -22,6 +22,7 @@ class CreateRequirementsTable extends Migration
             $table->string('loan_amount');
             $table->string('property_type');
             $table->mediumText('requirement');
+            $table->boolean('delete_flag')->default(0);
             $table->timestamps();
         });
     }
