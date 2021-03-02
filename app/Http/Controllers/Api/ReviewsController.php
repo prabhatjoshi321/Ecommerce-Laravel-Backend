@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\reviews;
 use Illuminate\Http\Request;
+use Auth;
 
 class ReviewsController extends Controller
 {
@@ -13,9 +14,13 @@ class ReviewsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function review_index()
     {
-        //
+        $user_id = Auth::user()->id;
+
+        return response()->json([
+            'data' => reviews::where('user_id', $user_id)->get()
+        ]);
     }
 
     /**
@@ -37,8 +42,6 @@ class ReviewsController extends Controller
     public function store(Request $request)
     {
         $request -> validate([
-            'user_id' => 'required' ,
-            'user_name' => "required",
             'product_id' => 'required',
             'stars' => 'required',
             'rev_subject' => 'required',
@@ -46,8 +49,8 @@ class ReviewsController extends Controller
         ]);
 
         $review = new Review([
-            'user_id' => $request->user_id,
-            'user_name' => $request->user_name,
+            'user_id' => Auth::user()->id,
+            'user_name' => Auth::user()->name,
             'product_id' => $request->product_id,
             'stars' => $request->stars,
             'rev_subject' => $request->rev_subject,

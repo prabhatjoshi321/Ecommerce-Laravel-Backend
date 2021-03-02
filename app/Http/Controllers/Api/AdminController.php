@@ -165,7 +165,11 @@ class AdminController extends Controller
         }
 
         return response()-> json([
-            'data' => user::get(),
+            'data' => user::where('usertype', 1)->get(),
+            'data_owner' => user::where('usertype', 2)->get(),
+            'data_dealer' => user::where('usertype', 3)->get(),
+            'data_lawyer' => user::where('usertype', 4)->get(),
+            'data_admin' => user::where('usertype', '>', 6)->get(),
         ],200);
     }
 

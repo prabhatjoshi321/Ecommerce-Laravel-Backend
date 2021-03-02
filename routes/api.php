@@ -73,6 +73,8 @@ Route::group([
         Route::post('/insert_product_sale', 'App\Http\Controllers\Api\ProductController@first');
         Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@second');
 
+        Route::get('/review_index', 'App\Http\Controllers\Api\ReviewsController@review_index');
+
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
 });
