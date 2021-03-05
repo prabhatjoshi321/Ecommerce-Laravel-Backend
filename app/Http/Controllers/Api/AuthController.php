@@ -135,7 +135,7 @@ class AuthController extends Controller
 
 
 
-    public function lawyer(Request $request){
+    public function lawyer_signup(Request $request){
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',

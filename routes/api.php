@@ -52,9 +52,10 @@ Route::group([
     Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
     Route::post('/requ', 'App\Http\Controllers\Api\RequirementController@create');
     Route::post('/req_index', 'App\Http\Controllers\Api\RequirementController@reqHandler');
-
     Route::get('/agent_properties', 'App\Http\Controllers\Api\ProductController@agent_properties');
 
+    Route::get('/lawyer_service_index', 'App\Http\Controllers\Api\LawyerController@lawyer_index');
+    Route::post('/lawyer_page', 'App\Http\Controllers\Api\LawyerController@lawyer_check');
 
     Route::group([
     'middleware' => 'auth:api'
@@ -74,6 +75,11 @@ Route::group([
         Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@second');
 
         Route::get('/review_index', 'App\Http\Controllers\Api\ReviewsController@review_index');
+
+        Route::post('/lawyer_create_service', 'App\Http\Controllers\Api\LawyerController@lawyer_create_service');
+        Route::get('/lawyer_service', 'App\Http\Controllers\Api\LawyerController@lawyer_service');
+        Route::post('/lawyer_service_delete', 'App\Http\Controllers\Api\LawyerController@lawyer_service_delete');
+
 
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
@@ -95,6 +101,7 @@ Route::group([
         Route::get('/product_views', 'App\Http\Controllers\Api\AdminController@product_views');
         Route::get('/review_count', 'App\Http\Controllers\Api\AdminController@review_count');
         Route::get('/product_update_admin', 'App\Http\Controllers\Api\AdminController@product_update');
+        Route::get('/admin_lawyer_service', 'App\Http\Controllers\Api\AdminController@admin_lawyer_service');
 
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');

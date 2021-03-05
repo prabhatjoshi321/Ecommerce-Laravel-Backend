@@ -11,6 +11,7 @@ class lawyer extends Model
 
     protected $fillable = [
         'user_id',
+        'name',
         'service_name',
         'service_details',
         'price'

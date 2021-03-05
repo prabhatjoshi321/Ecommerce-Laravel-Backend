@@ -16,8 +16,9 @@ class CreateLawyersTable extends Migration
         Schema::create('lawyers', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->string('name');
             $table->string('service_name');
-            $table->string('service_details');
+            $table->longText('service_details');
             $table->string('price');
             $table->string('delete_flag')->default(0);
             $table->timestamps();

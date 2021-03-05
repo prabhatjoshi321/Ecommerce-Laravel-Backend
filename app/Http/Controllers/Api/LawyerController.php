@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\lawyer;
 use App\Http\Controllers\controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Auth;
 
 class LawyerController extends Controller
 {
@@ -15,7 +17,7 @@ class LawyerController extends Controller
      */
     public function lawyer_index()
     {
-        $data = lawyer::where('delete_flag' , 0)->Latest()->paginate();
+        $data = lawyer::where('delete_flag' , 0)->get();
         return response()->json([
             'data' => $data
         ], 201);
@@ -28,9 +30,8 @@ class LawyerController extends Controller
      */
     public function lawyer_create_service(Request $request)
     {
-        $user_type = Auth::user()->usertype;
 
-        if ($user_type == 4)
+        if (Auth::user()->usertype != 4)
             return response()->json([
                 'message' => 'Unauthorised User',
             ], 201);
@@ -42,19 +43,20 @@ class LawyerController extends Controller
             'price' => 'required'
         ]);
 
-        $user_id = Auth::user()->id;
+        $user = Auth::user();
 
-        $service = new Service([
-            'user_id' => $user_id,
+        $Lawyer = new Lawyer([
+            'user_id' => $user->id,
+            'name' => $user->name,
             'service_name' => $request->service_name,
             'service_details' => $request->service_details,
             'price' => $request->price
         ]);
 
-        $service->save();
+        $Lawyer->save();
 
         return response()->json([
-            'added_service' => $service
+            'added_service' => $Lawyer
         ]);
     }
 
@@ -64,9 +66,54 @@ class LawyerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function lawyer_service()
     {
-        //
+
+        $data = lawyer::where('user_id', Auth::user()->id)->where('delete_flag', 0)->get();
+
+        return response()->json([
+            'data' => $data
+        ]);
+
+    }
+
+    public function lawyer_service_delete(Request $request)
+    {
+
+        $request->validate([
+            'id' => 'required',
+        ]);
+
+
+        $product_userid = lawyer::where('id', $request->id)->value('user_id');
+
+        $user_id = Auth::user()->id;
+
+        if ($user_id != $product_userid)
+            return response()->json([
+                'message' => 'Unauthorised User',
+            ], 401);
+
+        lawyer::where('id', $request->id)->update(['delete_flag' => 1 ]);
+        return response()->json([
+            'message' => 'Successfully deleted Service',
+        ], 201);
+
+    }
+
+    public function lawyer_check(Request $request)
+    {
+        $request -> validate([
+            'id' => 'required'
+        ]);
+
+        $lawyer = User::where('id', $request->id)->where('usertype', 4)->first();
+
+
+        return response()->json([
+            'data' => $lawyer
+        ]);
+
     }
 
     /**

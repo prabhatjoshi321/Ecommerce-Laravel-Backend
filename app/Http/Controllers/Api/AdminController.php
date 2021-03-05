@@ -17,6 +17,7 @@ use App\Models\requirement;
 use App\Models\product;
 use App\Models\favourites;
 use App\Models\last_searched_properties;
+use App\Models\lawyer;
 
 class AdminController extends Controller
 {
@@ -368,6 +369,24 @@ class AdminController extends Controller
         return response() -> json([
             'data' => $data
         ]);
+
+    }
+
+    public function admin_lawyer_service(){
+
+        $usertype = Auth::user()->usertype;
+
+        if($usertype < 6){
+            return response()->json([
+                'unauthorised',
+            ], 401);
+        }
+
+        $data = lawyer::get();
+
+        return response()->json([
+            'data' => $data
+        ], 201);
 
     }
 
