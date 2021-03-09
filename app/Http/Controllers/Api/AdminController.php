@@ -390,5 +390,22 @@ class AdminController extends Controller
 
     }
 
+    public function review_index()
+    {
+        $usertype = Auth::user()->usertype;
+
+        if($usertype < 6){
+            return response()->json([
+                'unauthorised',
+            ], 401);
+        }
+
+
+        return response()->json([
+            'data' => reviews::get()
+        ]);
+    }
+
+
 
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\requirement;
 use Illuminate\Http\Request;
+use Auth;
 
 class RequirementController extends Controller
 {
@@ -15,7 +16,29 @@ class RequirementController extends Controller
      */
     public function index()
     {
+
+        if(Auth::user()->usertype == 1){
+            return response()->json([
+                'unauthorised',
+            ], 401);
+        }
+
         $data = requirement::latest()->paginate(100);
+        return response()->json([
+            'data'=> $data,
+        ], 201);
+    }
+
+    public function display()
+    {
+
+        if(Auth::user()->usertype == 1){
+            return response()->json([
+                'unauthorised',
+            ], 401);
+        }
+
+        $data = requirement::where('delete_flag', 0)->latest()->paginate(100);
         return response()->json([
             'data'=> $data,
         ], 201);
@@ -29,7 +52,6 @@ class RequirementController extends Controller
     public function create(Request $request)
     {
         $request -> validate ([
-            'user_id' => 'required',
             'rental_sale_condition' => 'required',
             'purchase_mode' => 'required',
             'cash_amount' => 'required',
@@ -38,8 +60,10 @@ class RequirementController extends Controller
             'requirement' => 'required',
         ]);
 
+        $user_id = Auth::user()->id;
+
         $requirement = new Requirement([
-            'user_id' => $request->user_id,
+            'user_id' => $user_id,
             'rental_sale_condition' => $request->rental_sale_condition,
             'purchase_mode' => $request->purchase_mode,
             'cash_amount' => $request->cash_amount,
@@ -72,6 +96,20 @@ class RequirementController extends Controller
         return response() -> json([
             'requirements' => $requirements,
         ]);
+
+    }
+
+    public function delete(Request $request)
+    {
+
+        $request->validate([
+            'id' => 'required',
+        ]);
+
+        requirement::where('id', $request->id)->update(['delete_flag' => 1 ]);
+        return response()->json([
+            'message' => 'Successfully deleted Requirement',
+        ], 201);
 
     }
 

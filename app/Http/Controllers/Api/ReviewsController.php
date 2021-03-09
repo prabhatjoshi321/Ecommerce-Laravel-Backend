@@ -48,7 +48,7 @@ class ReviewsController extends Controller
             'rev_content' => 'required',
         ]);
 
-        $review = new Review([
+        $review = new Reviews([
             'user_id' => Auth::user()->id,
             'user_name' => Auth::user()->name,
             'product_id' => $request->product_id,
@@ -61,6 +61,18 @@ class ReviewsController extends Controller
 
         return response()->json([
             'message' => 'Review Submitted',
+        ],201);
+
+    }
+
+    public function product_review(Request $request)
+    {
+        $request -> validate([
+            'id' => 'required',
+        ]);
+
+        return response()->json([
+            'data' => reviews::where('product_id', $request->id)->get(),
         ],201);
 
     }

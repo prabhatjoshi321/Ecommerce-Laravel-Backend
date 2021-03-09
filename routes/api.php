@@ -47,7 +47,6 @@ Route::group([
 ], function () {
     Route::get('/get_product', 'App\Http\Controllers\Api\ProductController@index');
     Route::get('/seeto', 'App\Http\Controllers\Api\ProductController@product_index');
-    Route::get('/get_requ', 'App\Http\Controllers\Api\RequirementController@index');
     Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
     Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
     Route::post('/requ', 'App\Http\Controllers\Api\RequirementController@create');
@@ -57,10 +56,19 @@ Route::group([
     Route::get('/lawyer_service_index', 'App\Http\Controllers\Api\LawyerController@lawyer_index');
     Route::post('/lawyer_page', 'App\Http\Controllers\Api\LawyerController@lawyer_check');
 
+    Route::post('/product_review', 'App\Http\Controllers\Api\ReviewsController@product_review');
+
     Route::group([
-    'middleware' => 'auth:api'
+        'middleware' => 'auth:api'
     ], function() {
 
+        Route::get('/review_index', 'App\Http\Controllers\Api\ReviewsController@review_index');
+        Route::post('/post_review', 'App\Http\Controllers\Api\ReviewsController@store');
+
+
+        Route::get('/get_requ', 'App\Http\Controllers\Api\RequirementController@index');
+        Route::get('/requ_display', 'App\Http\Controllers\Api\RequirementController@display');
+        Route::post('/requirement_delete', 'App\Http\Controllers\Api\RequirementController@delete');
 
         Route::post('/save_search', 'App\Http\Controllers\Api\SavedsearchesController@store');
         Route::get('/get_search', 'App\Http\Controllers\Api\SavedsearchesController@index');
@@ -74,7 +82,6 @@ Route::group([
         Route::post('/insert_product_sale', 'App\Http\Controllers\Api\ProductController@first');
         Route::post('/insert_product_rent', 'App\Http\Controllers\Api\ProductController@second');
 
-        Route::get('/review_index', 'App\Http\Controllers\Api\ReviewsController@review_index');
 
         Route::post('/lawyer_create_service', 'App\Http\Controllers\Api\LawyerController@lawyer_create_service');
         Route::get('/lawyer_service', 'App\Http\Controllers\Api\LawyerController@lawyer_service');
@@ -102,6 +109,7 @@ Route::group([
         Route::get('/review_count', 'App\Http\Controllers\Api\AdminController@review_count');
         Route::get('/product_update_admin', 'App\Http\Controllers\Api\AdminController@product_update');
         Route::get('/admin_lawyer_service', 'App\Http\Controllers\Api\AdminController@admin_lawyer_service');
+        Route::get('/admin_review_index', 'App\Http\Controllers\Api\AdminController@review_index');
 
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');

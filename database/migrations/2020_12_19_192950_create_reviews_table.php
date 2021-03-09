@@ -19,7 +19,7 @@ class CreateReviewsTable extends Migration
             $table->string('user_name');
             $table->string('product_id');
             $table->string('stars');
-            $table->string('rav_subject');
+            $table->string('rev_subject');
             $table->longText('rev_content');
             $table->boolean('delete_flag')->default(0);
 
