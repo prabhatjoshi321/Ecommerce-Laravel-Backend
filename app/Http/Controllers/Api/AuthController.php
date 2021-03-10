@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Auth;
 use Image;
 use Illuminate\Support\Str;
+use Twilio\Rest\Client;
 
 class AuthController extends Controller
 {
@@ -17,7 +18,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
-            'other_mobile_number' => 'required|integer|between:1000000000,9999999999',
+            'other_mobile_number' => 'required|integer',
             'profile_pic' => 'required',
             'password' => 'required|string|confirmed'
         ]);
@@ -27,6 +28,14 @@ class AuthController extends Controller
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create("+91".$request->other_mobile_number, "sms");
 
         $user = new User([
             'name' => $request->name,
@@ -49,7 +58,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
-            'other_mobile_number' => 'required|integer|between:1000000000,9999999999',
+            'other_mobile_number' => 'required|integer',
             'address' => 'required',
             'city' => 'required',
             'pan_number' => 'required',
@@ -63,6 +72,14 @@ class AuthController extends Controller
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create("+91".$request->other_mobile_number, "sms");
 
         $user = new User([
             'name' => $request->name,
@@ -89,7 +106,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
-            'other_mobile_number' => 'required|integer|between:1000000000,9999999999',
+            'other_mobile_number' => 'required|integer',
             'address' => 'required',
             'city' => 'required',
             'pan_number' => 'required',
@@ -107,6 +124,14 @@ class AuthController extends Controller
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create("+91".$request->other_mobile_number, "sms");
 
         $user = new User([
             'name' => $request->name,
@@ -139,7 +164,7 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|string|unique:users',
-            'other_mobile_number' => 'required|integer|between:1000000000,9999999999',
+            'other_mobile_number' => 'required|integer',
             'address' => 'required',
             'city' => 'required',
             'pan_number' => 'required',
@@ -159,6 +184,14 @@ class AuthController extends Controller
         @list(, $file_data) = explode(',', $file_data);
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
+
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create("+91".$request->other_mobile_number, "sms");
 
         $user = new User([
             'name' => $request->name,
@@ -184,6 +217,63 @@ class AuthController extends Controller
         return response()->json([
             'data' => $user,
             'message' => 'Successfully created lawyer'
+        ], 201);
+    }
+
+    public function verify(Request $request)
+    {
+        $data = $request->validate([
+            'verification_code' => ['required', 'numeric'],
+            'phone_number' => ['required', 'string'],
+        ]);
+        /* Get credentials from .env */
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+        $twilio = new Client($twilio_sid, $token);
+        $verification = $twilio->verify->v2->services($twilio_verify_sid)
+            ->verificationChecks
+            ->create($data['verification_code'], array('to' => "+91".$data['phone_number']));
+
+        if ($verification->valid) {
+            User::where('other_mobile_number', $data['phone_number'])->update(['phone_number_verification_status' => 1]);
+            return response()->json([
+                'message' => 'Successfully verified'
+            ], 201);
+        }
+        return response()->json([
+            'message' => 'verification error'
+        ], 401);
+    }
+
+    public function reverify(Request $request)
+    {
+        $data = $request->validate([
+            'verification_code' => 'required|string',
+        ]);
+        /* Get credentials from .env */
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
+
+        $twilio = new Client($twilio_sid, $token);
+        $twilio->verify->v2->services($twilio_verify_sid)
+            ->verifications
+            ->create(Auth::user()->other_mobile_number, "sms");
+
+        $twilio = new Client($twilio_sid, $token);
+        $verification = $twilio->verify->v2->services($twilio_verify_sid)
+            ->verificationChecks
+            ->create($data['verification_code'], array('to' => Auth::user()->other_mobile_number));
+
+        if ($verification->valid) {
+            User::where('other_mobile_number', Auth::user()->other_mobile_number)->update(['phone_number_verification_status' => 1]);
+            return response()->json([
+                'message' => 'Successfully verified'
+            ], 201);
+        }
+        return response()->json([
+            'message' => 'verification error'
         ], 201);
     }
 

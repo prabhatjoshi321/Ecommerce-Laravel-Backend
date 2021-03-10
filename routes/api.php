@@ -31,6 +31,10 @@ Route::group([
     Route::post('/dealer_signup', 'App\Http\Controllers\Api\AuthController@dealer_company_signup');
     Route::post('/lawyer_signup', 'App\Http\Controllers\Api\AuthController@lawyer_signup');
 
+    Route::post('/verify', 'App\Http\Controllers\Api\AuthController@verify');
+    Route::post('/reverify', 'App\Http\Controllers\Api\AuthController@reverify');
+
+
 
 
     Route::group([
