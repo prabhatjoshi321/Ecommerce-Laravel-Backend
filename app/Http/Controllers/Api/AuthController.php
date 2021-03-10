@@ -29,9 +29,9 @@ class AuthController extends Controller
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
@@ -73,9 +73,9 @@ class AuthController extends Controller
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
@@ -125,9 +125,9 @@ class AuthController extends Controller
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
@@ -185,9 +185,9 @@ class AuthController extends Controller
         $imageName = 'IMAGE'.Str::random(30).'.'.'png';
         Storage::disk('public')->put('profile_image_file/'.$imageName, base64_decode($file_data));
 
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
             ->verifications
@@ -227,9 +227,9 @@ class AuthController extends Controller
             'phone_number' => ['required', 'string'],
         ]);
         /* Get credentials from .env */
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
         $twilio = new Client($twilio_sid, $token);
         $verification = $twilio->verify->v2->services($twilio_verify_sid)
             ->verificationChecks
@@ -252,9 +252,9 @@ class AuthController extends Controller
             'verification_code' => 'required|string',
         ]);
         /* Get credentials from .env */
-        $token = config("TWILIO_AUTH_TOKEN");
-        $twilio_sid = config("TWILIO_SID");
-        $twilio_verify_sid = config("TWILIO_VERIFY_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio_sid = getenv("TWILIO_SID");
+        $twilio_verify_sid = getenv("TWILIO_VERIFY_SID");
 
         $twilio = new Client($twilio_sid, $token);
         $twilio->verify->v2->services($twilio_verify_sid)
