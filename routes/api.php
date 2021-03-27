@@ -50,10 +50,10 @@ Route::group([
     'prefix' => 'product'
 ], function () {
     Route::get('/get_product', 'App\Http\Controllers\Api\ProductController@index');
+    Route::get('/get_product_featured', 'App\Http\Controllers\Api\ProductController@index_featured');
     Route::get('/seeto', 'App\Http\Controllers\Api\ProductController@product_index');
     Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
     Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
-    Route::post('/requ', 'App\Http\Controllers\Api\RequirementController@create');
     Route::post('/req_index', 'App\Http\Controllers\Api\RequirementController@reqHandler');
     Route::get('/agent_properties', 'App\Http\Controllers\Api\ProductController@agent_properties');
 
@@ -66,6 +66,7 @@ Route::group([
         'middleware' => 'auth:api'
     ], function() {
 
+        Route::post('/requ', 'App\Http\Controllers\Api\RequirementController@create');
         Route::get('/review_index', 'App\Http\Controllers\Api\ReviewsController@review_index');
         Route::post('/post_review', 'App\Http\Controllers\Api\ReviewsController@store');
 

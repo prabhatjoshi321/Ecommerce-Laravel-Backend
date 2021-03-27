@@ -26,6 +26,14 @@ class ProductController extends Controller
         ], 201);
     }
 
+    public function index_featured()
+    {
+        $data = product::where('delete_flag', 0)->Latest()->paginate(3);
+        return response()->json([
+            'data' =>$data,
+        ], 201);
+    }
+
 
 
      public function search_prod_by_id(Request $request){
