@@ -16,6 +16,7 @@ class CreateRequirementsTable extends Migration
         Schema::create('requirements', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
+            $table->string('user_name');
             $table->string('rental_sale_condition');
             $table->string('purchase_mode');
             $table->string('cash_amount');

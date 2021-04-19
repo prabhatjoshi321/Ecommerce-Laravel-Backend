@@ -17,6 +17,7 @@ class CreateReviewsTable extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('user_name');
+            $table->string('property_name');
             $table->string('product_id');
             $table->string('stars');
             $table->string('rev_subject');

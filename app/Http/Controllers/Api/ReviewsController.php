@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\product;
 use App\Models\reviews;
+use App\Models\eventtracker;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -48,9 +50,13 @@ class ReviewsController extends Controller
             'rev_content' => 'required',
         ]);
 
+        $property_name = product::select('build_name')->where('id', $request->product_id)->value('build_name');
+
+
         $review = new Reviews([
             'user_id' => Auth::user()->id,
             'user_name' => Auth::user()->name,
+            'property_name' => $property_name,
             'product_id' => $request->product_id,
             'stars' => $request->stars,
             'rev_subject' => $request->rev_subject,
@@ -58,9 +64,12 @@ class ReviewsController extends Controller
         ]);
 
         $review->save();
+        eventtracker::create(['symbol_code' => '5', 'event' => Auth::user()->name.' gave a review on a property '. $property_name]);
+
 
         return response()->json([
             'message' => 'Review Submitted',
+            $property_name
         ],201);
 
     }

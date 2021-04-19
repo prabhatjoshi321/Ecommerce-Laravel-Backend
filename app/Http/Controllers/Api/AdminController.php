@@ -85,32 +85,32 @@ class AdminController extends Controller
     {
         $usertype = Auth::user()->usertype;
 
-        if($usertype < 6){
-            return response()->json([
-                'unauthorised',
-            ], 401);
-        }
+        // if($usertype < 6){
+        //     return response()->json([
+        //         'unauthorised',
+        //     ], 401);
+        // }
 
         $request -> validate([
         'id' => 'required' ,
-        'name' => 'required' ,
-        'profile_pic' => 'required' ,
-        'company_name' => 'required' ,
-        'company_url' => 'required' ,
-        'address' => 'required' ,
-        'city' => 'required' ,
-        'other_mobile_number' => 'required' ,
-        'landline_number' => 'required' ,
-        'company_profile' => 'required' ,
-        'pan_number' => 'required' ,
-        'aadhar_number' => 'required' ,
-        'provided_service' => 'required' ,
-        'place_of_practice' => 'required' ,
-        'price_for_service' => 'required' ,
-        'law_firm_number' => 'required' ,
-        'practice_number' => 'required' ,
-        'blocked' => 'required' ,
-        'phone_number_verification_status' => 'required' ,
+        'name' => '' ,
+        'profile_pic' => '' ,
+        'company_name' => '' ,
+        'company_url' => '' ,
+        'address' => '' ,
+        'city' => '' ,
+        'other_mobile_number' => '' ,
+        'landline_number' => '' ,
+        'company_profile' => '' ,
+        'pan_number' => '' ,
+        'aadhar_number' => '' ,
+        'provided_service' => '' ,
+        'place_of_practice' => '' ,
+        'price_for_service' => '' ,
+        'law_firm_number' => '' ,
+        'practice_number' => '' ,
+        'blocked' => '' ,
+        'phone_number_verification_status' => '' ,
         ]);
 
         $data = user::find($request->id);
@@ -185,7 +185,7 @@ class AdminController extends Controller
         }
 
         return response()-> json([
-            'data' => product::get()
+            'data' => product::where('delete_flag', 0)->get()
         ],200);
     }
 
@@ -406,6 +406,43 @@ class AdminController extends Controller
         ]);
     }
 
+    public function user_check(Request $request)
+    {
+        $request -> validate([
+            'id' => 'required'
+        ]);
+
+        $lawyer = User::where('id', $request->id)->first();
+
+
+        return response()->json([
+            'data' => $lawyer
+        ]);
+
+    }
+
+    public function delete_product (Request $request){
+
+        $request->validate([
+            'product_id' => 'required',
+        ]);
+
+
+        $product_userid = product::where('id', $request->product_id)->value('user_id');
+
+        $user_id = Auth::user()->id;
+
+        if ($user_id < 6)
+            return response()->json([
+                'message' => 'Unauthorised User',
+            ], 401);
+
+        product::where('id', $request->product_id)->update(['delete_flag' => 1 ]);
+        return response()->json([
+            'message' => 'Successfully deleted Product',
+        ], 201);
+
+    }
 
 
 }

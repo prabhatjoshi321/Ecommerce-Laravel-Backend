@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\requirement;
+use App\Models\eventtracker;
 use Illuminate\Http\Request;
 use Auth;
 
@@ -64,6 +65,7 @@ class RequirementController extends Controller
 
         $requirement = new Requirement([
             'user_id' => $user_id,
+            'user_name' => Auth::user()->name,
             'rental_sale_condition' => $request->rental_sale_condition,
             'purchase_mode' => $request->purchase_mode,
             'cash_amount' => $request->cash_amount,
@@ -73,6 +75,8 @@ class RequirementController extends Controller
         ]);
 
         $requirement->save();
+        eventtracker::create(['symbol_code' => '8', 'event' => Auth::user()->name.' posted a new requirement.']);
+
 
         return response()->json([
             'message' => 'Successfully inserted requirement',

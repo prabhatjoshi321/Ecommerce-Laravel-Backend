@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\product;
+use App\Models\eventtracker;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -91,6 +92,40 @@ class ProductController extends Controller
             'product' => $products,
         ]);
      }
+
+
+
+     public function city_search_func(Request $request){
+
+        $request->validate([
+            'city' => 'required'
+        ]);
+        $prod_query3 = $request->city;
+
+
+        // $needles = explode(',', $q);
+
+        // In my case, I wanted to split the string when a comma or a whitespace is found:
+        // $needles = preg_split('/[\s,]+/', $q);
+
+        // $products = product::where('build_name', 'LIKE', "%{$q}%");
+
+        $products = product::Where(['city' => $prod_query3 , 'delete_flag' => 0]);
+
+
+        // foreach ($needles as $needle) {
+        //     $products = $products->orWhere('build_name', 'LIKE', "%{$needle}%");
+        // }
+
+        $products = $products->Latest()->paginate(150);
+
+        return response()-> json([
+            'product' => $products,
+        ]);
+     }
+
+
+
 
 
       public function product_index(){
@@ -272,6 +307,8 @@ class ProductController extends Controller
             ], 401);
 
         $product_data-> save();
+        eventtracker::create(['symbol_code' => '8', 'event' => Auth::user()->name.' created a new property listing for sale.']);
+
 
         return response()->json([
                 'message' => 'Successfully inserted product for sale',
@@ -455,6 +492,8 @@ class ProductController extends Controller
                 ], 201);
 
             $product_data->save();
+            eventtracker::create(['symbol_code' => '8', 'event' => Auth::user()->name.' created a new property listing for rent.']);
+
 
             return response()->json([
                 'message' => 'Successfully inserted product for rent',

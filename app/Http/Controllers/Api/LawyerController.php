@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\lawyer;
+use App\Models\eventtracker;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -45,15 +46,17 @@ class LawyerController extends Controller
 
         $user = Auth::user();
 
+
         $Lawyer = new Lawyer([
             'user_id' => $user->id,
             'name' => $user->name,
             'service_name' => $request->service_name,
             'service_details' => $request->service_details,
             'price' => $request->price
-        ]);
+            ]);
 
         $Lawyer->save();
+        eventtracker::create(['symbol_code' => '7', 'event' => Auth::user()->name.' posted a new lawyer service']);
 
         return response()->json([
             'added_service' => $Lawyer

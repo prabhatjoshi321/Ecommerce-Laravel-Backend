@@ -11,6 +11,7 @@ class requirement extends Model
 
     protected $fillable = [
         'user_id',
+        'user_name',
         'rental_sale_condition',
         'purchase_mode',
         'cash_amount',

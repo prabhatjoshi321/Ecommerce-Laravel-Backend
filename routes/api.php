@@ -33,15 +33,17 @@ Route::group([
 
     Route::post('/verify', 'App\Http\Controllers\Api\AuthController@verify');
     Route::post('/reverify', 'App\Http\Controllers\Api\AuthController@reverify');
+    Route::post('/forgot_password', 'App\Http\Controllers\Api\AuthController@forgot_password');
 
 
 
 
     Route::group([
-      'middleware' => 'auth:api'
+        'middleware' => 'auth:api'
     ], function() {
         Route::get('/logout', 'App\Http\Controllers\Api\AuthController@logout');
         Route::get('/user', 'App\Http\Controllers\Api\AuthController@user');
+        Route::post('/change_password', 'App\Http\Controllers\Api\AuthController@change_password');
     });
    // Route::get('/home', 'App\Http\Controllers\Api\HomeController@index')->name('home');
 });
@@ -54,6 +56,7 @@ Route::group([
     Route::get('/seeto', 'App\Http\Controllers\Api\ProductController@product_index');
     Route::post('/see', 'App\Http\Controllers\Api\ProductController@search_prod_by_id');
     Route::post('/search', 'App\Http\Controllers\Api\ProductController@search_func');
+    Route::post('/city_search', 'App\Http\Controllers\Api\ProductController@city_search_func');
     Route::post('/req_index', 'App\Http\Controllers\Api\RequirementController@reqHandler');
     Route::get('/agent_properties', 'App\Http\Controllers\Api\ProductController@agent_properties');
 
@@ -103,12 +106,18 @@ Route::group([
 
     Route::post('/admin_login', 'App\Http\Controllers\Api\AuthController@admin_login');
     Route::post('/admin_signup', 'App\Http\Controllers\Api\AuthController@admin_signup');
+    Route::post('/company_signup', 'App\Http\Controllers\Api\AuthController@company_signup');
     Route::post('/admin_userfind', 'App\Http\Controllers\Api\AdminController@user_update');
 
     Route::group([
         'middleware' => 'auth:api'
     ], function() {
+        Route::post('/product_sale_update', 'App\Http\Controllers\Api\AdminController@update_product');
+        Route::post('/delete_product_admin', 'App\Http\Controllers\Api\AdminController@delete_product');
+        Route::post('/user_page', 'App\Http\Controllers\Api\AdminController@user_check');
+        Route::post('/user_update', 'App\Http\Controllers\Api\AdminController@user_update');
         Route::get('/user_index', 'App\Http\Controllers\Api\AdminController@user_index_admin');
+        Route::get('/event_index', 'App\Http\Controllers\Api\EventtrackerController@index');
         Route::get('/product_index', 'App\Http\Controllers\Api\AdminController@product_index_admin');
         Route::get('/product_views', 'App\Http\Controllers\Api\AdminController@product_views');
         Route::get('/review_count', 'App\Http\Controllers\Api\AdminController@review_count');
