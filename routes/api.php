@@ -108,6 +108,7 @@ Route::group([
     Route::post('/admin_signup', 'App\Http\Controllers\Api\AuthController@admin_signup');
     Route::post('/company_signup', 'App\Http\Controllers\Api\AuthController@company_signup');
     Route::post('/admin_userfind', 'App\Http\Controllers\Api\AdminController@user_update');
+    Route::get('/loan_index', 'App\Http\Controllers\Api\LoansController@index');
 
     Route::group([
         'middleware' => 'auth:api'
@@ -116,6 +117,8 @@ Route::group([
         Route::post('/delete_product_admin', 'App\Http\Controllers\Api\AdminController@delete_product');
         Route::post('/user_page', 'App\Http\Controllers\Api\AdminController@user_check');
         Route::post('/user_update', 'App\Http\Controllers\Api\AdminController@user_update');
+        Route::post('/admin_loans', 'App\Http\Controllers\Api\LoansController@first');
+        Route::post('/loan_delete', 'App\Http\Controllers\Api\LoansController@loan_delete');
         Route::get('/user_index', 'App\Http\Controllers\Api\AdminController@user_index_admin');
         Route::get('/event_index', 'App\Http\Controllers\Api\EventtrackerController@index');
         Route::get('/product_index', 'App\Http\Controllers\Api\AdminController@product_index_admin');
