@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -35,8 +34,12 @@ Route::group([
     Route::post('/reverify', 'App\Http\Controllers\Api\AuthController@reverify');
     Route::post('/forgot_password', 'App\Http\Controllers\Api\AuthController@forgot_password');
 
-
-
+    Route::group([
+        'middleware' => 'web'
+    ], function() {
+        Route::get('/redirect', 'App\Http\Controllers\Api\AuthController@googleredirect');
+        Route::get('/callback', 'App\Http\Controllers\Api\AuthController@googlecallback');
+    });
 
     Route::group([
         'middleware' => 'auth:api'

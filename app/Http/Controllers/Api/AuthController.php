@@ -14,6 +14,7 @@ use Twilio\Rest\Client;
 use App\Models\eventtracker;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
@@ -498,5 +499,76 @@ class AuthController extends Controller
         return \Response::json($arr);
     }
 
+    public function googleredirect(){
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function googlecallback(){
+        $user = Socialite::driver('google')->user();
+
+        $finduser = User::where('email', $user->email)->first();
+
+        if($finduser){
+
+            Auth::login($finduser);
+
+
+            $tokenResult = $finduser->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            $token->expires_at = Carbon::now()->addWeeks(20);
+            $token->save();
+
+            return redirect()->to('http://localhost:4200/login?token='.$tokenResult->accessToken.'&data='.$finduser);
+
+            // return response()->json([
+
+            //     'username' => $finduser->name,
+            //     'id' => $finduser->id,
+            //     'usertype' => $finduser->usertype,
+            //     'access_token' => $tokenResult->accessToken,
+            //     'token_type' => 'Bearer',
+            //     'expires_at' => Carbon::parse(
+            //         $tokenResult->token->expires_at
+            //     )->toDateTimeString(),
+            //     'misc' => $finduser
+            //     ]);
+
+        }else{
+            $newUser = User::create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'usertype' => 1,
+                'profile_pic' => $user->avatar_original,
+                'other_mobile_number' => 1234567890,
+                'phone_number_verification_status' => 1,
+                'id'=> $user->id,
+                'password' => encrypt('123456dummy')
+            ]);
+
+            Auth::login($newUser);
+
+            $datauser = User::where('email', $newUser->email)->first();
+
+            $tokenResult = $datauser->createToken('Personal Access Token');
+            $token = $tokenResult->token;
+            $token->expires_at = Carbon::now()->addWeeks(20);
+            $token->save();
+
+            return redirect()->to('http://localhost:4200/login?token='.$tokenResult->accessToken.'&data='.$datauser);
+
+            // return response()->json([
+            //     'username' => $datauser->name,
+            //     'id' => $datauser->id,
+            //     'usertype' => $datauser->usertype,
+            //     'access_token' => $tokenResult->accessToken,
+            //     'token_type' => 'Bearer',
+            //     'expires_at' => Carbon::parse(
+            //         $tokenResult->token->expires_at
+            //     )->toDateTimeString(),
+            //     'misc' => $datauser
+            //     ]);
+        }
+
+    }
 
 }
