@@ -518,7 +518,7 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(20);
             $token->save();
 
-            return redirect()->to('http://localhost:4200/login?token='.$tokenResult->accessToken.'&data='.$finduser);
+            return redirect()->to('https://www.housingstreet.com/login?token='.$tokenResult->accessToken.'&data='.$finduser);
 
             // return response()->json([
 
@@ -554,7 +554,7 @@ class AuthController extends Controller
             $token->expires_at = Carbon::now()->addWeeks(20);
             $token->save();
 
-            return redirect()->to('http://localhost:4200/login?token='.$tokenResult->accessToken.'&data='.$datauser);
+            return redirect()->to('https://www.housingstreet.com/login?token='.$tokenResult->accessToken.'&data='.$datauser);
 
             // return response()->json([
             //     'username' => $datauser->name,
